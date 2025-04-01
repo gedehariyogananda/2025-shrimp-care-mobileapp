@@ -28,4 +28,9 @@ class MyTextStyle {
     fontSize: 20,
     fontWeight: FontWeight.w600,
   );
+  static const text24 = TextStyle(
+    fontFamily: "Inter",
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+  );
 }
