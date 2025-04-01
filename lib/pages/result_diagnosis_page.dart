@@ -36,7 +36,7 @@ class ResultDiagnosisPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const DetailDiagnosisPage()),
+                        builder: (context) => const DetailDiseasePage()),
                   );
                 }),
             SizedBox(height: 16),

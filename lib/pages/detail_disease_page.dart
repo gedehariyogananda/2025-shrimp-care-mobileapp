@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shrimp_care_mobileapp/constant/const.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/disease.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
@@ -31,7 +32,7 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
     return Scaffold(
       backgroundColor: MyColor.themeColor,
       appBar: CustomAppBar(
-        title: "Detail Diagnosis",
+        title: "Detail Penyakit",
       ),
       body: Column(
         children: [
@@ -85,8 +86,8 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildInformasiTab(),
-                _buildPencegahanTab(),
+                _tabInformasi(),
+                _tabPencegahan(),
               ],
             ),
           ),
@@ -140,25 +141,20 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
     );
   }
 
-  Widget _buildInformasiTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _cardDiseaseDetail("Pengertian",
-              "Bintik putih atau White Spot Disease (WSD) adalah penyakit viral yang disebabkan oleh White Spot Syndrome Virus (WSSV). Penyakit ini sangat menular dan dapat menyebabkan kematian massal pada udang dalam waktu singkat."),
-          _cardDiseaseDetail("Gejala",
-              "Muncul bintik-bintik putih pada cangkang dan tubuh udang, Udang menjadi lemas dan bergerak lambat, Nafsu makan menurun atau berhenti makan, Udang sering naik ke permukaan air dan berenang tidak teratur, Kematian mendadak dalam jumlah besar"),
-          _cardDiseaseDetail("Penyebab",
-              "Infeksi White Spot Syndrome Virus (WSSV)Perubahan suhu air yang drastisKualitas air buruk, seperti kadar amonia tinggiPadat tebar udang terlalu tinggi Udang stres akibat lingkungan tidak stabil, Penyebaran melalui air, udang yang terinfeksi, atau peralatan tambak yang tidak steril."),
-          _cardDiseaseDetail("Info lebih lanjut", "Belum ada data."),
-        ],
-      ),
-    );
-  }
+  Widget _cardDiseaseDetail(String title, String description) {
+    IconData icon = Icons.question_mark_outlined;
+    if (title == AppConstants.detailDiseaseTitleGejala) {
+      icon = Icons.manage_search;
+    } else if (title == AppConstants.detailDiseaseTitlePenyebab) {
+      icon = Icons.warning_amber_outlined;
+    } else if (title == AppConstants.detailDiseaseTitleInfo) {
+      icon = Icons.medical_information_rounded;
+    } else if (title == AppConstants.detailDiseaseTitlePencegahan) {
+      icon = Icons.check_circle_outline;
+    } else if (title == AppConstants.detailDiseaseTitleRekomendasi) {
+      icon = Icons.recommend;
+    }
 
-  Widget _cardDiseaseDetail(IconData icon, String title, String description) {
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.only(bottom: 8),
@@ -166,73 +162,66 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 24, color: Colors.black),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                icon,
+                size: 24,
+                color: Colors.black,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
                   title,
                   style: MyTextStyle.text16.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(description, style: MyTextStyle.text14),
-              ],
-            ),
+              ),
+            ],
           ),
+          const SizedBox(height: 8),
+          Text(description, style: MyTextStyle.text14),
         ],
       ),
     );
   }
 
-  Widget _buildPencegahanTab() {
+  Widget _tabInformasi() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSectionTitle("Pencegahan"),
-          _buildBulletList([
-            "Menjaga kualitas air (suhu stabil, kadar oksigen cukup, dan amonia rendah).",
-            "Menggunakan benur bebas WSSV dari hatchery terpercaya.",
-            "Mengontrol padat tebar agar tidak terlalu tinggi.",
-            "Memberikan pakan bergizi untuk meningkatkan daya tahan tubuh udang.",
-          ]),
+          _cardDiseaseDetail(AppConstants.detailDiseaseTitlePengertian,
+              "Bintik putih atau White Spot Disease (WSD) adalah penyakit viral yang disebabkan oleh White Spot Syndrome Virus (WSSV). Penyakit ini sangat menular dan dapat menyebabkan kematian massal pada udang dalam waktu singkat."),
+          _cardDiseaseDetail(AppConstants.detailDiseaseTitleGejala,
+              "Muncul bintik-bintik putih pada cangkang dan tubuh udang, Udang menjadi lemas dan bergerak lambat, Nafsu makan menurun atau berhenti makan, Udang sering naik ke permukaan air dan berenang tidak teratur, Kematian mendadak dalam jumlah besar"),
+          _cardDiseaseDetail(AppConstants.detailDiseaseTitlePenyebab,
+              "Infeksi White Spot Syndrome Virus (WSSV)Perubahan suhu air yang drastisKualitas air buruk, seperti kadar amonia tinggiPadat tebar udang terlalu tinggi Udang stres akibat lingkungan tidak stabil, Penyebaran melalui air, udang yang terinfeksi, atau peralatan tambak yang tidak steril."),
+          _cardDiseaseDetail(
+              AppConstants.detailDiseaseTitleInfo, "Belum ada data."),
         ],
       ),
     );
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Text(
-      title,
-      style: MyTextStyle.text16.copyWith(fontWeight: FontWeight.bold),
-    );
-  }
-
-  Widget _buildBulletList(List<String> items) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: items
-          .map(
-            (item) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(Icons.circle, size: 6, color: Colors.black),
-                  const SizedBox(width: 8),
-                  Expanded(child: Text(item, style: MyTextStyle.text14)),
-                ],
-              ),
-            ),
-          )
-          .toList(),
+  Widget _tabPencegahan() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _cardDiseaseDetail(AppConstants.detailDiseaseTitlePencegahan,
+              "Menjaga kualitas air (suhu stabil, kadar oksigen cukup, dan amonia rendah),Menggunakan benur bebas WSSV (benih udang berkualitas dari hatchery terpercaya),Mengontrol padat tebar agar tidak terlalu tinggi,Memberikan pakan bergizi untuk meningkatkan daya tahan tubuh udang,Melakukan biosekuriti dengan membatasi akses ke tambak dan menjaga kebersihan alat., Menggunakan probiotik untuk menjaga keseimbangan mikroorganisme di tambak."),
+          _cardDiseaseDetail(AppConstants.detailDiseaseTitleRekomendasi,
+              "Saat ini tidak ada obat spesifik untuk membunuh virus WSSV."),
+        ],
+      ),
     );
   }
 
