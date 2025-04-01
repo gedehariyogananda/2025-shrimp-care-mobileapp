@@ -1,0 +1,38 @@
+name: shrimp_care_mobileapp
+description: "A new Flutter project."
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  another_flushbar: ^1.12.30
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.0.10+1
+  intl: ^0.20.2
+  smooth_page_indicator: ^1.2.1
+
+dev_dependencies:
+  flutter_lints: ^4.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/inter/Inter_18pt-Black.ttf
+        - asset: assets/fonts/inter/Inter_18pt-Bold.ttf
+        - asset: assets/fonts/inter/Inter_18pt-ExtraBold.ttf
+        - asset: assets/fonts/inter/Inter_18pt-ExtraLight.ttf
+        - asset: assets/fonts/inter/Inter_18pt-Light.ttf
+        - asset: assets/fonts/inter/Inter_18pt-Medium.ttf
+        - asset: assets/fonts/inter/Inter_18pt-Regular.ttf
+        - asset: assets/fonts/inter/Inter_18pt-SemiBold.ttf
+        - asset: assets/fonts/inter/Inter_18pt-Thin.ttf
