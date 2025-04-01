@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shrimp_care_mobileapp/pages/detail_disease_page.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/widgets/app_bar.dart';
@@ -31,7 +32,13 @@ class ResultDiagnosisPage extends StatelessWidget {
                     "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
                 title: "Bintik Hitam",
                 accuracy: 50,
-                onTap: () {}),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const DetailDiagnosisPage()),
+                  );
+                }),
             SizedBox(height: 16),
             attentionCard(
                 isAlertDanger: false,

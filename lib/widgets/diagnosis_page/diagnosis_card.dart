@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shrimp_care_mobileapp/utils/colors.dart';
+import 'package:shrimp_care_mobileapp/utils/disease.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 
 Widget diagnosisCard({
@@ -9,16 +9,6 @@ Widget diagnosisCard({
   String? date,
   required VoidCallback onTap,
 }) {
-  Color accuracyColor;
-
-  if (accuracy <= 40) {
-    accuracyColor = MyColor.danger;
-  } else if (accuracy <= 70) {
-    accuracyColor = MyColor.warning;
-  } else {
-    accuracyColor = MyColor.primary;
-  }
-
   return GestureDetector(
     onTap: onTap,
     child: SizedBox(
@@ -44,7 +34,7 @@ Widget diagnosisCard({
             ],
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center, 
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
@@ -59,7 +49,7 @@ Widget diagnosisCard({
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center, 
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       title,
@@ -86,7 +76,7 @@ Widget diagnosisCard({
                           child: Container(
                             height: 6.0,
                             decoration: BoxDecoration(
-                              color: accuracyColor,
+                              color: MyDisease.getColorByAccuracy(accuracy),
                               borderRadius: BorderRadius.circular(3.0),
                             ),
                           ),
@@ -99,7 +89,7 @@ Widget diagnosisCard({
                         Icon(
                           Icons.line_axis_outlined,
                           size: 16.0,
-                          color: accuracyColor,
+                          color: MyDisease.getColorByAccuracy(accuracy),
                         ),
                         const SizedBox(width: 4.0),
                         Text(

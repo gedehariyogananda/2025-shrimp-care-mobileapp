@@ -11,6 +11,5 @@ class MyColor {
   static const Color softWarning = Color(0xffFFF8EB);
   static const Color success = Color(0xff00D58A);
   static const Color softSuccess = Color(0xffE2F2F0);
-
   static const Color themeColor = Color(0xFFEDF1F7);
 }

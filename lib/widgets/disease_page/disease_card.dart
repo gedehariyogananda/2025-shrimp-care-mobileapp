@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shrimp_care_mobileapp/utils/colors.dart';
+import 'package:shrimp_care_mobileapp/utils/disease.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 
 Widget diseaseCard({
@@ -9,22 +9,7 @@ Widget diseaseCard({
   required int risk,
   required VoidCallback onTap,
 }) {
-  String riskText;
-  Color riskColor;
-
-  if (risk >= 1 && risk <= 2) {
-    riskText = 'Rendah';
-    riskColor = MyColor.primary;
-  } else if (risk >= 3 && risk <= 4) {
-    riskText = 'Sedang';
-    riskColor = MyColor.warning;
-  } else if (risk == 5) {
-    riskText = 'Tinggi';
-    riskColor = MyColor.danger;
-  } else {
-    riskText = 'Normal';
-    riskColor = Colors.black;
-  }
+  final riskDetails = MyDisease.getRiskDetails(risk);
 
   return GestureDetector(
     onTap: onTap,
@@ -73,12 +58,13 @@ Widget diseaseCard({
                     ),
                     Row(
                       children: [
-                        Icon(Icons.warning, color: riskColor, size: 18),
+                        Icon(Icons.warning,
+                            color: riskDetails.riskColor, size: 18),
                         const SizedBox(width: 6),
                         Text(
-                          'Risiko $riskText',
+                          'Risiko ${riskDetails.riskText}',
                           style: MyTextStyle.text14.copyWith(
-                            color: riskColor,
+                            color: riskDetails.riskColor,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
