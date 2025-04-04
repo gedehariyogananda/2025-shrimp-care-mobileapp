@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
-import 'package:shrimp_care_mobileapp/widgets/diagnosis_page/diagnosis_card.dart';
-import 'package:shrimp_care_mobileapp/widgets/disease_page/disease_card.dart';
-import 'package:shrimp_care_mobileapp/widgets/home_page/information_card.dart';
-import 'package:shrimp_care_mobileapp/widgets/home_page/menu.dart';
-import 'package:shrimp_care_mobileapp/widgets/home_page/text_top_card.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/views/widget/diagnosis_card.dart';
+import 'package:shrimp_care_mobileapp/features/disease/views/widget/disease_card.dart';
+import 'package:shrimp_care_mobileapp/features/home/views/widget/information_card.dart';
+import 'package:shrimp_care_mobileapp/features/home/views/widget/menu.dart';
+import 'package:shrimp_care_mobileapp/features/home/views/widget/text_top_card.dart';
 
 class HomePage extends StatelessWidget {
   final bool isSamplingDataEmpty;

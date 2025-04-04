@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shrimp_care_mobileapp/widgets/app_bar.dart';
-import 'package:shrimp_care_mobileapp/widgets/null_state.dart';
+import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
+import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 
 class DetailSamplingPage extends StatelessWidget {
   @override

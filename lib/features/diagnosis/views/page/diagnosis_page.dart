@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:shrimp_care_mobileapp/pages/result_diagnosis_page.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/result_diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
-import 'package:shrimp_care_mobileapp/widgets/alert_snackbar.dart';
-import 'package:shrimp_care_mobileapp/widgets/app_bar.dart';
-import 'package:shrimp_care_mobileapp/widgets/diagnosis_page/attention_card.dart';
-import 'package:shrimp_care_mobileapp/widgets/loading_screen.dart';
+import 'package:shrimp_care_mobileapp/utils/alert_snackbar.dart';
+import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/views/widget/attention_card.dart';
+import 'package:shrimp_care_mobileapp/utils/loading_screen.dart';
 
 class DiagnosisPage extends StatefulWidget {
   @override

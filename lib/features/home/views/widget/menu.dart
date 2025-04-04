@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shrimp_care_mobileapp/pages/detail_sampling_page.dart';
-import 'package:shrimp_care_mobileapp/pages/diagnosis_page.dart';
-import 'package:shrimp_care_mobileapp/pages/disease_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 
 Widget menu(BuildContext context) {
@@ -14,10 +12,7 @@ Widget menu(BuildContext context) {
         outsideColor: MyColor.softSuccess,
         title: 'Penyakit',
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DiseasePage()),
-          );
+          context.goNamed('disease');
         },
       ),
       menuItem(
@@ -26,10 +21,7 @@ Widget menu(BuildContext context) {
         outsideColor: MyColor.softPrimary,
         title: 'Diagnosis',
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DiagnosisPage()),
-          );
+          context.goNamed('diagnosis');
         },
       ),
       menuItem(
@@ -38,10 +30,7 @@ Widget menu(BuildContext context) {
         outsideColor: MyColor.softWarning,
         title: 'Sampling',
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DetailSamplingPage()),
-          );
+          context.goNamed('sampling');
         },
       ),
     ],
@@ -71,7 +60,8 @@ Widget menuItem({
               Container(
                 height: 40,
                 width: 40,
-                margin: const EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 8),
+                margin: const EdgeInsets.only(
+                    left: 24, right: 24, top: 8, bottom: 8),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: gradient,

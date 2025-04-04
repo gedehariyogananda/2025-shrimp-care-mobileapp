@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:shrimp_care_mobileapp/pages/detail_disease_page.dart';
+import 'package:shrimp_care_mobileapp/features/disease/views/page/detail_disease_page.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
-import 'package:shrimp_care_mobileapp/widgets/app_bar.dart';
-import 'package:shrimp_care_mobileapp/widgets/diagnosis_page/attention_card.dart';
-import 'package:shrimp_care_mobileapp/widgets/diagnosis_page/diagnosis_card.dart';
-import 'package:shrimp_care_mobileapp/widgets/null_state.dart';
+import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/views/widget/attention_card.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/views/widget/diagnosis_card.dart';
+import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 
 class ResultDiagnosisPage extends StatelessWidget {
   @override

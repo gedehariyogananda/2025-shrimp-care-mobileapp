@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shrimp_care_mobileapp/pages/detail_sampling_page.dart';
-import 'package:shrimp_care_mobileapp/pages/diagnosis_page.dart';
+import 'package:shrimp_care_mobileapp/features/sampling/views/page/detail_sampling_page.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
@@ -92,15 +93,14 @@ Widget informationCard({
     child: Container(
       height: 115,
       margin: const EdgeInsets.symmetric(horizontal: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: MyColor.softSecondary,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 11),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -115,9 +115,8 @@ Widget informationCard({
                 )
               ],
             ),
-            const SizedBox(height: 8),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: Text(
@@ -125,10 +124,11 @@ Widget informationCard({
                     style: MyTextStyle.text12,
                   ),
                 ),
-                SvgPicture.asset(
-                  'assets/images/core/icon_shrimp.svg',
-                  width: 40,
-                  height: 40,
+                Image.asset(
+                  'assets/images/core/icon_shrimp_care.png',
+                  width: 80,
+                  height: 70,
+                  fit: BoxFit.cover,
                 ),
               ],
             ),

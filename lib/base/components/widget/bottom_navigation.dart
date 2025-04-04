@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:shrimp_care_mobileapp/pages/core/akun_page.dart';
-import 'package:shrimp_care_mobileapp/pages/core/diagnosa_page.dart';
-import 'package:shrimp_care_mobileapp/pages/core/home_page.dart';
-import 'package:shrimp_care_mobileapp/pages/core/sampling_page.dart';
-import 'package:shrimp_care_mobileapp/pages/detail_sampling_page.dart';
-import 'package:shrimp_care_mobileapp/pages/diagnosis_page.dart';
+import 'package:shrimp_care_mobileapp/features/account/views/page/account_page.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/history_diagnosis_page.dart';
+import 'package:shrimp_care_mobileapp/features/home/views/page/home_page.dart';
+import 'package:shrimp_care_mobileapp/features/sampling/views/page/sampling_page.dart';
+import 'package:shrimp_care_mobileapp/features/sampling/views/page/detail_sampling_page.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
-import 'package:shrimp_care_mobileapp/widgets/app_bar.dart';
+import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
 
 class BottomNavigation extends StatefulWidget {
   @override
@@ -320,10 +320,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
           },
           children: <Widget>[
             HomePage(),
-            DiagnosaPage(),
+            HistoryDiagnosisPage(),
             InputPage(),
             SamplingPage(),
-            AkunPage(),
+            AccountPage(),
           ],
         ),
         bottomNavigationBar: Stack(

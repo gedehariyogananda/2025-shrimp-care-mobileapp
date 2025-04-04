@@ -9,4 +9,9 @@ class AppConstants {
   static const String detailDiseaseTitleInfo = "Info Lebih Lanjut";
   static const String detailDiseaseTitlePencegahan = "Pencegahan";
   static const String detailDiseaseTitleRekomendasi = "Rekomendasi Pengobatan";
+
+  static const String keySharedPrefUserId = "userId";
+  static const String keySharedPrefToken = "token";
+
+  static const int timeoutConnection = 10;
 }

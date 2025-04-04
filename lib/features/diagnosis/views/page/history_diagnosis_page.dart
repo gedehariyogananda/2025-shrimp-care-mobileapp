@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shrimp_care_mobileapp/constant/const.dart';
-import 'package:shrimp_care_mobileapp/pages/diagnosis_page.dart';
+import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
-import 'package:shrimp_care_mobileapp/widgets/alert_snackbar.dart';
-import 'package:shrimp_care_mobileapp/widgets/null_state.dart';
+import 'package:shrimp_care_mobileapp/utils/alert_snackbar.dart';
+import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 
-class DiagnosaPage extends StatefulWidget {
+class HistoryDiagnosisPage extends StatefulWidget {
   @override
-  _DiagnosaPageState createState() => _DiagnosaPageState();
+  _HistoryDiagnosisPageState createState() => _HistoryDiagnosisPageState();
 }
 
-class _DiagnosaPageState extends State<DiagnosaPage> {
+class _HistoryDiagnosisPageState extends State<HistoryDiagnosisPage> {
   late DateTime selectedDate;
 
   @override

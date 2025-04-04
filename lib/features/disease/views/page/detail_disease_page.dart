@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shrimp_care_mobileapp/constant/const.dart';
+import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/disease.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
-import 'package:shrimp_care_mobileapp/widgets/app_bar.dart';
+import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
 
 class DetailDiseasePage extends StatefulWidget {
   const DetailDiseasePage({super.key});

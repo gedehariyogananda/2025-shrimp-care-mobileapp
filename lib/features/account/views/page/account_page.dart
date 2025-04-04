@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:shrimp_care_mobileapp/widgets/null_state.dart';
+import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 
-class SamplingPage extends StatelessWidget {
+class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
       child: nullState(
-        nullTitle: "Sampling",
+        nullTitle: "Akun",
         description: "Fitur ini akan datang secepatnya!",
       ),
     );

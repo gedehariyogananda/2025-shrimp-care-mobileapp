@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:async';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
-import 'package:shrimp_care_mobileapp/widgets/bottom_navigation.dart';
+import 'package:shrimp_care_mobileapp/base/components/widget/bottom_navigation.dart';
 
 class SplashScreenPage extends StatefulWidget {
   @override
@@ -24,22 +25,17 @@ class _SplashScreenPageState extends State<SplashScreenPage>
 
     _rotationAnimation = TweenSequence<double>([
       TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0, end: 3.14159),
-          weight: 1), // 0° to 180°
+          tween: Tween<double>(begin: 0, end: 3.14159), weight: 1),
       TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 3.14159, end: 0),
-          weight: 1), // 180° to 0°
+          tween: Tween<double>(begin: 3.14159, end: 0), weight: 1),
     ]).animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
 
     Timer(const Duration(seconds: 1), () {
       _controller.repeat();
     });
 
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => BottomNavigation()),
-      );
+    Timer(const Duration(milliseconds: 2500), () {
+      context.go('/session');
     });
   }
 
