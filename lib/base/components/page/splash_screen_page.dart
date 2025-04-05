@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
 import 'dart:async';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
-import 'package:shrimp_care_mobileapp/base/components/widget/bottom_navigation.dart';
 
 class SplashScreenPage extends StatefulWidget {
   @override
@@ -82,6 +82,20 @@ class _SplashScreenPageState extends State<SplashScreenPage>
                   ),
                 ),
               ],
+            ),
+          ),
+          Positioned(
+            bottom: 16,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Text(
+                AppConstants.appName + ' v' + AppConstants.appVersion,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white.withOpacity(0.7),
+                ),
+              ),
             ),
           ),
         ],

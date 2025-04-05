@@ -330,7 +330,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
           alignment: Alignment.bottomCenter,
           clipBehavior: Clip.none,
           children: [
-            // Bottom Navigation Bar
             Container(
               height: 60,
               decoration: const BoxDecoration(

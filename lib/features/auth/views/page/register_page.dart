@@ -1,25 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shrimp_care_mobileapp/features/auth/views/widget/button_oauth.dart';
+import 'package:shrimp_care_mobileapp/features/auth/views/widget/form_dropdown.dart';
 import 'package:shrimp_care_mobileapp/features/auth/views/widget/separation_line.dart';
 import 'package:shrimp_care_mobileapp/utils/button.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/text_form_field.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  String jobController = '';
+
+  List<String> jobValue = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    jobValue = [
+      'Pegawai Swasta',
+      'Dosen',
+      'Penyuluh',
+      'Pelajar/Mahasiswa',
+      'Peneliti',
+      'Sales',
+      'Lainnya'
+    ];
+  }
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
+    nameController.dispose();
+    phoneController.dispose();
     super.dispose();
   }
 
@@ -56,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'Masuk',
+                      'Daftar',
                       style: MyTextStyle.text24.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -94,6 +119,13 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   customFormInput(
+                      title: 'Nama',
+                      hintText: "Masukkan nama",
+                      icon: Icons.person,
+                      controller: nameController,
+                      isRequired: true),
+                  const SizedBox(height: 20),
+                  customFormInput(
                       title: 'Email',
                       hintText: "Masukkan email",
                       icon: Icons.alternate_email_sharp,
@@ -101,44 +133,63 @@ class _LoginPageState extends State<LoginPage> {
                       isRequired: true),
                   const SizedBox(height: 20),
                   customFormInput(
-                      title: 'Password',
-                      hintText: "Masukkan password",
+                      title: 'Nomor Telepon',
+                      hintText: "Masukkan nomor telepon",
+                      controller: phoneController,
+                      icon: Icons.phone,
+                      isRequired: true),
+                  const SizedBox(height: 20),
+                  formDropdown(
+                      title: 'Pekerjaan',
+                      isRequired: true,
+                      items: jobValue,
+                      hintText: 'Pilih pekerjaan',
+                      leadingIcon: Icons.work,
+                      selectedValue: jobController == '' ? null : jobController,
+                      onChanged: (value) {
+                        setState(() {
+                          jobController = value!;
+                        });
+                      }),
+                  const SizedBox(height: 20),
+                  customFormInput(
+                      title: 'Kata Sandi',
+                      hintText: "Masukkan kata sandi",
+                      icon: Icons.lock,
+                      controller: passwordController,
+                      isRequired: true),
+                  const SizedBox(height: 20),
+                  customFormInput(
+                      title: 'Konfirmasi Kata Sandi',
+                      hintText: "Masukkan konfirmasi kata sandi",
                       controller: passwordController,
                       icon: Icons.lock,
                       isRequired: true),
                   const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          context.goNamed('register');
-                        },
-                        child: Text(
-                          'Belum punya akun?',
-                          style: MyTextStyle.text14.copyWith(
-                            color: MyColor.primary,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        'Lupa kata sandi?',
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () {
+                        context.goNamed('login');
+                      },
+                      child: Text(
+                        'Sudah punya akun? Masuk',
                         style: MyTextStyle.text14.copyWith(
                           color: MyColor.primary,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                    ],
+                    ),
                   ),
                   const SizedBox(height: 20),
-                  myButton(text: 'Login', onPressed: () {}),
+                  myButton(text: 'Register', onPressed: () {}),
                   const SizedBox(height: 20),
                   separationLine(),
                   const SizedBox(height: 20),
                   buttonOauth(
                     onPressed: () {},
                   ),
+                  SizedBox(height: 20),
                 ],
               ),
             ),

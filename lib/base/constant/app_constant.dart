@@ -1,5 +1,6 @@
 class AppConstants {
   static const String appName = 'Shrimp Care';
+  static const String appVersion = '1.0.0';
   static const String initializedLang = "id_ID";
   static const String formatHistoryDiagnosa = "MMMM yyyy";
 

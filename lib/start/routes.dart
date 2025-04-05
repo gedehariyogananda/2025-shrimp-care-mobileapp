@@ -4,6 +4,7 @@ import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
 import 'package:shrimp_care_mobileapp/features/auth/views/page/login_page.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/bottom_navigation.dart';
+import 'package:shrimp_care_mobileapp/features/auth/views/page/register_page.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/features/disease/views/page/disease_page.dart';
 import 'package:shrimp_care_mobileapp/features/sampling/views/page/detail_sampling_page.dart';
@@ -50,12 +51,19 @@ final GoRouter router = GoRouter(routes: [
     },
   ),
   GoRoute(
+    path: '/register',
+    name: 'register',
+    builder: (context, state) {
+      return RegisterPage();
+    },
+  ),
+  GoRoute(
     path: '/session',
     name: 'session',
     redirect: (context, state) async {
       String? token =
           await TokenProvider().getDataToken(AppConstants.keySharedPrefToken);
-      if (token == null) {
+      if (token != null) {
         return '/home_page';
       } else {
         return '/login';
