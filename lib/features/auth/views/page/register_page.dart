@@ -137,7 +137,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       hintText: "Masukkan nomor telepon",
                       controller: phoneController,
                       icon: Icons.phone,
-                      isRequired: true),
+                      isRequired: true,
+                      forPhoneNumber: true),
                   const SizedBox(height: 20),
                   formDropdown(
                       title: 'Pekerjaan',

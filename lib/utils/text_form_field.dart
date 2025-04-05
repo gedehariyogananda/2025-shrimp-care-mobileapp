@@ -9,6 +9,7 @@ Widget customFormInput({
   bool isRequired = false,
   FocusNode? focusNode,
   TextEditingController? controller,
+  bool forPhoneNumber = false,
 }) {
   return StatefulBuilder(
     builder: (context, setState) {
@@ -39,6 +40,9 @@ Widget customFormInput({
             focusNode: focusNode,
             onFocusChange: (_) => setState(() {}),
             child: TextFormField(
+              keyboardType: forPhoneNumber
+                  ? TextInputType.phone
+                  : TextInputType.text,
               controller: controller,
               textAlign: TextAlign.start,
               textAlignVertical: TextAlignVertical.center,

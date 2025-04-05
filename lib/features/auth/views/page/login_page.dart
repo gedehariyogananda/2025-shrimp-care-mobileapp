@@ -132,7 +132,11 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  myButton(text: 'Login', onPressed: () {}),
+                  myButton(
+                      text: 'Login',
+                      onPressed: () {
+                        context.go('/home_page');
+                      }),
                   const SizedBox(height: 20),
                   separationLine(),
                   const SizedBox(height: 20),
