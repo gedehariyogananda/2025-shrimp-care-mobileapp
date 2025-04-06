@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:shrimp_care_mobileapp/features/auth/providers/login_provider.dart';
 import 'package:shrimp_care_mobileapp/features/auth/views/widget/button_oauth.dart';
 import 'package:shrimp_care_mobileapp/features/auth/views/widget/separation_line.dart';
+import 'package:shrimp_care_mobileapp/utils/alert_snackbar.dart';
 import 'package:shrimp_care_mobileapp/utils/button.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/text_form_field.dart';
@@ -134,8 +137,24 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 20),
                   myButton(
                       text: 'Login',
+                      isLoading: context.watch<LoginProvider>().isLoading,
                       onPressed: () {
-                        context.go('/home_page');
+                        final email = emailController.text.trim();
+                        final password = passwordController.text;
+
+                        context.read<LoginProvider>().login(
+                              email: email,
+                              password: password,
+                              onError: (error) {
+                                AlertSnackbar.showErrorSnackbar(
+                                    context, error.toString());
+                              },
+                              onSuccess: () {
+                                AlertSnackbar.showSuccessSnackbar(
+                                    context, 'Login berhasil!');
+                                context.go('/home_page');
+                              },
+                            );
                       }),
                   const SizedBox(height: 20),
                   separationLine(),

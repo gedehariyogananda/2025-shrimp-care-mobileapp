@@ -1,5 +1,5 @@
 class AppExceptions implements Exception {
-  final String message;
+  String? message;
 
   AppExceptions({
     required this.message,
@@ -7,13 +7,15 @@ class AppExceptions implements Exception {
 
   @override
   String toString() {
-    return message;
+    return message!;
   }
 }
 
 class ServerException extends AppExceptions {
-  ServerException()
-      : super(message: "Tidak ada respon dari server. Silakan coba lagi.");
+  ServerException(String message)
+      : super(message: message.isNotEmpty
+            ? message
+            : "Terjadi kesalahan pada server, silahkan coba lagis.");
 }
 
 class BadRequestException extends AppExceptions {

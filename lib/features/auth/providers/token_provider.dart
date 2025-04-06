@@ -11,14 +11,13 @@ class TokenProvider extends ChangeNotifier {
   String? get token => _token;
   String? get userId => _userId;
 
-  void saveData(String token, String userId) async {
+  void setToken(String keyName, dynamic key) async {
     SharedPreferences value = await _pref;
 
-    value.setString('userId', userId);
-    value.setString('token', token);
+    value.setString(keyName, key);
   }
 
-  Future<String?> getDataToken(String key) async {
+  Future<String?> getDataLocal(String key) async {
     SharedPreferences value = await _pref;
 
     String? data = value.getString(key);

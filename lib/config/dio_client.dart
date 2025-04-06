@@ -20,7 +20,7 @@ class DioClient {
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         _authToken =
-            await TokenProvider().getDataToken(AppConstants.keySharedPrefToken);
+            await TokenProvider().getDataLocal(AppConstants.keySharedPrefToken);
         if (_authToken != null) {
           options.headers['Authorization'] = 'Bearer $_authToken';
         }

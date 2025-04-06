@@ -2,7 +2,7 @@
     <application
         android:label="ShrimpCare"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/logo_shrimp_care">
         <activity
             android:name=".MainActivity"
             android:exported="true"

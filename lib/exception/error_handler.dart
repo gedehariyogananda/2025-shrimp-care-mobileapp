@@ -3,6 +3,14 @@ import 'package:shrimp_care_mobileapp/exception/app_exception.dart';
 
 void errorHandler({Object? error}) {
   if (error is DioException) {
+    if (error.type == DioExceptionType.connectionTimeout) {
+      throw TimeoutException();
+    } else if (error.type == DioExceptionType.connectionError) {
+      throw NoConnectionException();
+    } else if (error.type == DioExceptionType.receiveTimeout) {
+      throw NoConnectionException();
+    }
+
     if (error.response != null) {
       switch (error.response!.statusCode) {
         case 400:
@@ -14,12 +22,12 @@ void errorHandler({Object? error}) {
         case 422:
           throw ValidationException(message: error.response!.data['message']);
         case 500:
-          throw ServerException();
+          throw ServerException(error.toString());
         default:
-          throw ServerException();
+          throw ServerException(error.toString());
       }
     } else {
-      throw ServerException();
+      throw ServerException(error.toString());
     }
   } else {
     throw UnexpectedException();

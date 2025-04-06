@@ -62,7 +62,7 @@ final GoRouter router = GoRouter(routes: [
     name: 'session',
     redirect: (context, state) async {
       String? token =
-          await TokenProvider().getDataToken(AppConstants.keySharedPrefToken);
+          await TokenProvider().getDataLocal(AppConstants.keySharedPrefToken);
       if (token != null) {
         return '/home_page';
       } else {
