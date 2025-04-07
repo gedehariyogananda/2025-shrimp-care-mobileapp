@@ -29,6 +29,8 @@ class GreetingProvider extends ChangeNotifier {
       if (nameUser == null) {
         return '-';
       } else {
+        _isLoading = false;
+        notifyListeners();
         return nameUser;
       }
     } catch (e) {
