@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
 import 'package:shrimp_care_mobileapp/base/components/page/splash_screen_page.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/login_provider.dart';
+import 'package:shrimp_care_mobileapp/features/auth/providers/register_provider.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
+import 'package:shrimp_care_mobileapp/features/home/providers/greeting_provider.dart';
 import 'package:shrimp_care_mobileapp/start/routes.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 
@@ -26,6 +28,12 @@ class MainApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => LoginProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => RegisterProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => GreetingProvider(),
         ),
       ],
       child: MaterialApp.router(

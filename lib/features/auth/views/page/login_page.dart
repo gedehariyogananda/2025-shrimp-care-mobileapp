@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/login_provider.dart';
 import 'package:shrimp_care_mobileapp/features/auth/views/widget/button_oauth.dart';
 import 'package:shrimp_care_mobileapp/features/auth/views/widget/separation_line.dart';
-import 'package:shrimp_care_mobileapp/utils/alert_snackbar.dart';
+import 'package:shrimp_care_mobileapp/utils/alert_flushbar.dart';
 import 'package:shrimp_care_mobileapp/utils/button.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/text_form_field.dart';
@@ -16,8 +16,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController(text: 'guary060504@gmail.com');
+  TextEditingController passwordController = TextEditingController(text: 'password');
 
   @override
   void dispose() {
@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                       isLoading: context.watch<LoginProvider>().isLoading,
                       onPressed: () {
                         final email = emailController.text.trim();
-                        final password = passwordController.text;
+                        final password = passwordController.text.trim();
 
                         context.read<LoginProvider>().login(
                               email: email,
@@ -150,9 +150,12 @@ class _LoginPageState extends State<LoginPage> {
                                     context, error.toString());
                               },
                               onSuccess: () {
-                                AlertSnackbar.showSuccessSnackbar(
-                                    context, 'Login berhasil!');
                                 context.go('/home_page');
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  AlertSnackbar.showSuccessSnackbar(
+                                      context, 'Login berhasil!');
+                                });
                               },
                             );
                       }),

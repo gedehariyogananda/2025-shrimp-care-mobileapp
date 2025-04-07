@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shrimp_care_mobileapp/config/dio_client.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
@@ -17,8 +16,6 @@ class LoginProvider extends ChangeNotifier {
     VoidCallback? onSuccess,
     Function(String error)? onError,
   }) async {
-    print(">>> Login method terpanggil");
-
     if (email.isEmpty || password.isEmpty) {
       onError?.call('Email and password tidak boleh kosong!');
       return;
@@ -31,7 +28,6 @@ class LoginProvider extends ChangeNotifier {
       await _loginService.login(email: email, password: password);
       onSuccess?.call();
     } catch (e) {
-      print('Error: $e');
       onError?.call(e.toString());
     } finally {
       _isLoading = false;

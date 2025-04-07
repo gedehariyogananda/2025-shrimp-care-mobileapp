@@ -1,6 +1,7 @@
 class Profile {
   String? id;
   String? username;
+  String? name;
   String? email;
   String? employment;
   String? roles;
@@ -11,6 +12,7 @@ class Profile {
   Profile(
       {this.id,
       this.username,
+      this.name,
       this.email,
       this.employment,
       this.roles,
@@ -21,6 +23,7 @@ class Profile {
   Profile.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     username = json['username'];
+    name = json['name'];
     email = json['email'];
     employment = json['employment'];
     roles = json['roles'];
@@ -33,6 +36,7 @@ class Profile {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = id;
     data['username'] = username;
+    data['name'] = name;
     data['email'] = email;
     data['employment'] = employment;
     data['roles'] = roles;

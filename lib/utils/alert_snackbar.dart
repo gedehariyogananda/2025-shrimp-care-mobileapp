@@ -2,7 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 
-class AlertSnackbar {
+class AlertSnackbarArchive {
   static void showSuccessSnackbar(BuildContext context, String message) {
     Flushbar(
       titleText: Text(

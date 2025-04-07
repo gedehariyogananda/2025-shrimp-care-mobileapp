@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:shrimp_care_mobileapp/features/auth/providers/register_provider.dart';
 import 'package:shrimp_care_mobileapp/features/auth/views/widget/button_oauth.dart';
 import 'package:shrimp_care_mobileapp/features/auth/views/widget/form_dropdown.dart';
 import 'package:shrimp_care_mobileapp/features/auth/views/widget/separation_line.dart';
+import 'package:shrimp_care_mobileapp/utils/alert_flushbar.dart';
+import 'package:shrimp_care_mobileapp/utils/alert_snackbar.dart';
 import 'package:shrimp_care_mobileapp/utils/button.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/text_form_field.dart';
@@ -163,7 +167,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   customFormInput(
                       title: 'Konfirmasi Kata Sandi',
                       hintText: "Masukkan konfirmasi kata sandi",
-                      controller: passwordController,
+                      controller: confirmPasswordController,
                       icon: Icons.lock,
                       isRequired: true),
                   const SizedBox(height: 10),
@@ -183,7 +187,37 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  myButton(text: 'Register', onPressed: () {}),
+                  myButton(
+                      text: 'Register',
+                      isLoading: context.watch<RegisterProvider>().isLoading,
+                      onPressed: () {
+                        final email = emailController.text.trim();
+                        final password = passwordController.text;
+                        final confirmPassword = confirmPasswordController.text;
+                        final name = nameController.text.trim();
+                        final phone = phoneController.text.trim();
+                        final job = jobController;
+
+                        context.read<RegisterProvider>().register(
+                              email: email,
+                              password: password,
+                              confirmPassword: confirmPassword,
+                              name: name,
+                              phone: phone,
+                              job: job,
+                              onError: (error) {
+                                AlertSnackbar.showErrorSnackbar(
+                                    context, error.toString());
+                              },
+                              onSuccess: () async {
+                                AlertSnackbar.showSuccessSnackbar(
+                                    context, 'Register berhasil!');
+                                await Future.delayed(
+                                    const Duration(seconds: 1));
+                                context.go('/login');
+                              },
+                            );
+                      }),
                   const SizedBox(height: 20),
                   separationLine(),
                   const SizedBox(height: 20),

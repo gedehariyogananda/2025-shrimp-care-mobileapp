@@ -34,6 +34,7 @@ class LoginService {
       final dataUser = Profile.fromJson(profile.data['data']);
 
       tokenProvider.setToken(AppConstants.keySharedPrefUserId, dataUser.id);
+      tokenProvider.setToken(AppConstants.keySharedPrefName, dataUser.name);
     } catch (e) {
       errorHandler(error: e);
       rethrow;

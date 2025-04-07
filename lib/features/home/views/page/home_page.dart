@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
+import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
+import 'package:shrimp_care_mobileapp/features/home/providers/greeting_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/widget/diagnosis_card.dart';
@@ -36,19 +40,37 @@ class HomePage extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Selamat datang,',
-                                  style: MyTextStyle.text18.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.normal,
-                                  ),
+                                Consumer<GreetingProvider>(
+                                  builder: (context, greetingProvider, _) {
+                                    return Text(
+                                      greetingProvider.getGreeting(),
+                                      style: MyTextStyle.text18.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    );
+                                  },
                                 ),
-                                Text(
-                                  'Michelle Inn',
-                                  style: MyTextStyle.text18.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                Consumer<GreetingProvider>(
+                                  builder: (context, greetingProvider, _) {
+                                    return FutureBuilder<String?>(
+                                      future: greetingProvider.nameGreeting(),
+                                      builder: (context, snapshot) {
+                                        if (greetingProvider.isLoading) {
+                                          return const CircularProgressIndicator(
+                                            color: Colors.white,
+                                          );
+                                        }
+                                        return Text(
+                                          snapshot.data ?? '',
+                                          style: MyTextStyle.text18.copyWith(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -140,13 +162,12 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        padding: const EdgeInsets.all(14),
-                        child: menu(context)
-                      ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          padding: const EdgeInsets.all(14),
+                          child: menu(context)),
                       const SizedBox(height: 16),
                       textTopCard(
                         title: "Waspadai Penyakit Udang",

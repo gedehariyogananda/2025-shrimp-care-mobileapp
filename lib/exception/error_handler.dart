@@ -12,6 +12,9 @@ void errorHandler({Object? error}) {
     }
 
     if (error.response != null) {
+      print(error.response!.statusCode);
+      print(error.response!.data['message']);
+      print(error.response!.data['errors']);
       switch (error.response!.statusCode) {
         case 400:
           throw BadRequestException(message: error.response!.data['message']);
@@ -20,7 +23,7 @@ void errorHandler({Object? error}) {
         case 404:
           throw NotFoundException();
         case 422:
-          throw ValidationException(message: error.response!.data['message']);
+          throw ValidationException(errors: error.response!.data['errors']);
         case 500:
           throw ServerException(error.toString());
         default:

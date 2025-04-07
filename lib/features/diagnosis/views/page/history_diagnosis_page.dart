@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/diagnosis_page.dart';
+import 'package:shrimp_care_mobileapp/utils/alert_flushbar.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
-import 'package:shrimp_care_mobileapp/utils/alert_snackbar.dart';
 import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 
 class HistoryDiagnosisPage extends StatefulWidget {
