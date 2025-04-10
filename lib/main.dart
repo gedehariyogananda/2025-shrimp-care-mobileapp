@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
-import 'package:shrimp_care_mobileapp/base/components/page/splash_screen_page.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/login_provider.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/register_provider.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
+import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
 import 'package:shrimp_care_mobileapp/features/home/providers/greeting_provider.dart';
 import 'package:shrimp_care_mobileapp/start/routes.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
@@ -34,6 +34,9 @@ class MainApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => GreetingProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DiseaseProvider(),
         ),
       ],
       child: MaterialApp.router(

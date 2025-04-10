@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
 import 'package:shrimp_care_mobileapp/features/home/providers/greeting_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
+import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/widget/diagnosis_card.dart';
 import 'package:shrimp_care_mobileapp/features/disease/views/widget/disease_card.dart';
 import 'package:shrimp_care_mobileapp/features/home/views/widget/information_card.dart';
 import 'package:shrimp_care_mobileapp/features/home/views/widget/menu.dart';
 import 'package:shrimp_care_mobileapp/features/home/views/widget/text_top_card.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final bool isSamplingDataEmpty;
 
   const HomePage({super.key, this.isSamplingDataEmpty = true});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<DiseaseProvider>().fetchDiseases();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -24,7 +38,7 @@ class HomePage extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  height: isSamplingDataEmpty ? 285 : 290,
+                  height: widget.isSamplingDataEmpty ? 285 : 290,
                   color: MyColor.primary,
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -94,7 +108,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (isSamplingDataEmpty)
+                if (widget.isSamplingDataEmpty)
                   GestureDetector(
                     onTap: () {
                       // todo: navigate to sampling page
@@ -140,7 +154,7 @@ class HomePage extends StatelessWidget {
                   ),
                 Container(
                   height: 20,
-                  color: isSamplingDataEmpty
+                  color: widget.isSamplingDataEmpty
                       ? const Color(0xFF0F39B3)
                       : MyColor.primary,
                   child: Container(
@@ -174,20 +188,55 @@ class HomePage extends StatelessWidget {
                       const SizedBox(
                         height: 5,
                       ),
-                      diseaseCard(
-                          image:
-                              "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
-                          title: "Bintik Putih (White Spot Disease)",
-                          description:
-                              "Penyakit akibat virus yang menyebabkan bercak putih pada badan udang dan mantap  ",
-                          risk: 5,
-                          onTap: () {}),
+                      Consumer<DiseaseProvider>(
+                          builder: (context, diseaseProvider, child) {
+                        if (diseaseProvider.diseases.isNotEmpty) {
+                          return Skeletonizer(
+                            enabled: diseaseProvider.isLoading,
+                            enableSwitchAnimation: true,
+                            child: Column(
+                              children: List.generate(
+                                diseaseProvider.diseases.length,
+                                (index) {
+                                  final disease =
+                                      diseaseProvider.diseases[index];
+                                  return Column(
+                                    children: [
+                                      diseaseCard(
+                                        title: disease.nameDisease!,
+                                        // image: disease.imageDisease!,
+                                        image:
+                                            "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
+                                        risk: disease.riskLevel!,
+                                        description:
+                                            disease.descriptionDisease!,
+                                        onTap: () {
+                                          context.pushNamed(
+                                            'detail_disease',
+                                            pathParameters: {
+                                              'id': disease.id!,
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+                        } else {
+                          return nullState(nullTitle: "Belum ada data!");
+                        }
+                      }),
                       const SizedBox(
                         height: 10,
                       ),
                       textTopCard(
                         title: "Riwayat Diagnosis",
-                        onTap: () {},
+                        onTap: () {
+                          context.pushNamed("riwayat_diagnosis");
+                        },
                       ),
                       const SizedBox(
                         height: 5,

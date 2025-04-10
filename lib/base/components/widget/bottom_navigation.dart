@@ -296,19 +296,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Color(0xFFEDF1F7),
-        appBar: _selectedIndex == 0
+        appBar: _selectedIndex == 0 || _selectedIndex == 1
             ? null
             : CustomAppBar(
                 title: _pageTitles[_selectedIndex],
-                showRightButton: _selectedIndex == 1,
-                iconButton: Icons.add,
-                onRightButtonPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DiagnosisPage(),
-                      ));
-                },
               ),
         body: PageView(
           controller: _pageController,

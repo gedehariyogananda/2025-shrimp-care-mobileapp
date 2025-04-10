@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/utils/alert_flushbar.dart';
@@ -43,6 +44,7 @@ class _HistoryDiagnosisPageState extends State<HistoryDiagnosisPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(title: "History Diagnosis",),
       backgroundColor: MyColor.themeColor,
       body: Padding(
         padding: const EdgeInsets.all(16),

@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
+import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/disease.dart';
+import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class DetailDiseasePage extends StatefulWidget {
-  const DetailDiseasePage({super.key});
+  final String? id;
+  const DetailDiseasePage({super.key, this.id});
 
   @override
   State<DetailDiseasePage> createState() => _DetailDiseasePageState();
@@ -19,6 +24,12 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
   @override
   void initState() {
     super.initState();
+    Future.microtask(() {
+      if (widget.id != null) {
+        Provider.of<DiseaseProvider>(context, listen: false)
+            .fetchDiseasesById(widget.id!);
+      }
+    });
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
       setState(() {});
@@ -27,72 +38,93 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
 
   @override
   Widget build(BuildContext context) {
-    final riskDetails = MyDisease.getRiskDetails(4);
-
     return Scaffold(
       backgroundColor: MyColor.themeColor,
       appBar: CustomAppBar(
         title: "Detail Penyakit",
       ),
-      body: Column(
-        children: [
-          Container(
-            height: 288,
-            color: Colors.white,
-            width: double.infinity,
-            child: Column(
-              children: [
-                Image.network(
-                  "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
-                  fit: BoxFit.cover,
-                  height: 200,
-                  width: double.infinity,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Bintik Putih (White Spot Disease)",
-                        style: MyTextStyle.text18.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
+      body: Consumer<DiseaseProvider>(
+          builder: (context, detailDiseaseProvider, child) {
+        final detail = detailDiseaseProvider.selectedDisease;
+        final riskDetails = MyDisease.getRiskDetails(detail.riskLevel!);
+
+        if (detailDiseaseProvider.diseases.isEmpty) {
+          return nullState(nullTitle: "Data tidak ditemukan");
+        }
+
+        return Skeletonizer(
+          enableSwitchAnimation: true,
+          enabled: detailDiseaseProvider.isLoading,
+          child: Column(
+            children: [
+              Container(
+                height: 288,
+                color: Colors.white,
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Image.network(
+                      // detail.imageDisease!,
+                      "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
+                      fit: BoxFit.cover,
+                      height: 200,
+                      width: double.infinity,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Icons.warning,
-                              color: riskDetails.riskColor, size: 18),
-                          const SizedBox(width: 6),
                           Text(
-                            'Risiko ${riskDetails.riskText}',
-                            style: MyTextStyle.text14.copyWith(
-                              color: riskDetails.riskColor,
-                              fontWeight: FontWeight.w500,
+                            detail.nameDisease!,
+                            style: MyTextStyle.text18.copyWith(
+                              fontWeight: FontWeight.bold,
                             ),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Icon(Icons.warning,
+                                  color: riskDetails.riskColor, size: 18),
+                              const SizedBox(width: 6),
+                              Text(
+                                'Risiko ${riskDetails.riskText}',
+                                style: MyTextStyle.text14.copyWith(
+                                  color: riskDetails.riskColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 16),
+              _buildCustomTabBar(),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _tabInformasi(
+                      definition: detail.definitionDisease!,
+                      symptoms: detail.symtomsDisease!,
+                      causes: detail.causesDisease!,
+                      moreInfo: detail.moreInformation!,
+                    ),
+                    _tabPencegahan(
+                      prevention: detail.preventionDisease!,
+                      recommendation: detail.recomendationDisease!,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          _buildCustomTabBar(),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _tabInformasi(),
-                _tabPencegahan(),
-              ],
-            ),
-          ),
-        ],
-      ),
+        );
+      }),
     );
   }
 
@@ -191,35 +223,43 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
     );
   }
 
-  Widget _tabInformasi() {
+  Widget _tabInformasi({
+    String? definition,
+    String? symptoms,
+    String? causes,
+    String? moreInfo,
+  }) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _cardDiseaseDetail(AppConstants.detailDiseaseTitlePengertian,
-              "Bintik putih atau White Spot Disease (WSD) adalah penyakit viral yang disebabkan oleh White Spot Syndrome Virus (WSSV). Penyakit ini sangat menular dan dapat menyebabkan kematian massal pada udang dalam waktu singkat."),
-          _cardDiseaseDetail(AppConstants.detailDiseaseTitleGejala,
-              "Muncul bintik-bintik putih pada cangkang dan tubuh udang, Udang menjadi lemas dan bergerak lambat, Nafsu makan menurun atau berhenti makan, Udang sering naik ke permukaan air dan berenang tidak teratur, Kematian mendadak dalam jumlah besar"),
-          _cardDiseaseDetail(AppConstants.detailDiseaseTitlePenyebab,
-              "Infeksi White Spot Syndrome Virus (WSSV)Perubahan suhu air yang drastisKualitas air buruk, seperti kadar amonia tinggiPadat tebar udang terlalu tinggi Udang stres akibat lingkungan tidak stabil, Penyebaran melalui air, udang yang terinfeksi, atau peralatan tambak yang tidak steril."),
           _cardDiseaseDetail(
-              AppConstants.detailDiseaseTitleInfo, "Belum ada data."),
+              AppConstants.detailDiseaseTitlePengertian, definition ?? "-"),
+          _cardDiseaseDetail(
+              AppConstants.detailDiseaseTitleGejala, symptoms ?? "-"),
+          _cardDiseaseDetail(
+              AppConstants.detailDiseaseTitlePenyebab, causes ?? "-"),
+          _cardDiseaseDetail(
+              AppConstants.detailDiseaseTitleInfo, moreInfo ?? "-"),
         ],
       ),
     );
   }
 
-  Widget _tabPencegahan() {
+  Widget _tabPencegahan({
+    String? prevention,
+    String? recommendation,
+  }) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _cardDiseaseDetail(AppConstants.detailDiseaseTitlePencegahan,
-              "Menjaga kualitas air (suhu stabil, kadar oksigen cukup, dan amonia rendah),Menggunakan benur bebas WSSV (benih udang berkualitas dari hatchery terpercaya),Mengontrol padat tebar agar tidak terlalu tinggi,Memberikan pakan bergizi untuk meningkatkan daya tahan tubuh udang,Melakukan biosekuriti dengan membatasi akses ke tambak dan menjaga kebersihan alat., Menggunakan probiotik untuk menjaga keseimbangan mikroorganisme di tambak."),
+          _cardDiseaseDetail(
+              AppConstants.detailDiseaseTitlePencegahan, prevention ?? "-"),
           _cardDiseaseDetail(AppConstants.detailDiseaseTitleRekomendasi,
-              "Saat ini tidak ada obat spesifik untuk membunuh virus WSSV."),
+              recommendation ?? "-"),
         ],
       ),
     );

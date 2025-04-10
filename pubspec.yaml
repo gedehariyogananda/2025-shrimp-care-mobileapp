@@ -16,6 +16,7 @@ dependencies:
   intl: ^0.20.2
   provider: ^6.1.4
   shared_preferences: ^2.0.1
+  skeletonizer: ^1.4.3
   smooth_page_indicator: ^1.2.1
 
 dev_dependencies:

@@ -12,7 +12,7 @@ Widget menu(BuildContext context) {
         outsideColor: MyColor.softSuccess,
         title: 'Penyakit',
         onPressed: () {
-          context.goNamed('disease');
+          context.pushNamed('disease');
         },
       ),
       menuItem(
@@ -21,7 +21,7 @@ Widget menu(BuildContext context) {
         outsideColor: MyColor.softPrimary,
         title: 'Diagnosis',
         onPressed: () {
-          context.goNamed('diagnosis');
+          context.pushNamed('diagnosis');
         },
       ),
       menuItem(
@@ -30,7 +30,7 @@ Widget menu(BuildContext context) {
         outsideColor: MyColor.softWarning,
         title: 'Sampling',
         onPressed: () {
-          context.goNamed('sampling');
+          context.pushNamed('sampling');
         },
       ),
     ],
