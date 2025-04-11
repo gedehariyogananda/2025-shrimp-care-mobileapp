@@ -5,7 +5,7 @@ import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 Widget diagnosisCard({
   required String image,
   required String title,
-  required int accuracy,
+  required double accuracy,
   String? date,
   required VoidCallback onTap,
 }) {

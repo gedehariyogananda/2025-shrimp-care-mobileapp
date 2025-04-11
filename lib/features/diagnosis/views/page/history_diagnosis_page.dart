@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosis_provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/diagnosis_page.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/views/widget/diagnosis_card.dart';
 import 'package:shrimp_care_mobileapp/utils/alert_flushbar.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/utils/null_state.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class HistoryDiagnosisPage extends StatefulWidget {
   @override
@@ -14,37 +18,15 @@ class HistoryDiagnosisPage extends StatefulWidget {
 }
 
 class _HistoryDiagnosisPageState extends State<HistoryDiagnosisPage> {
-  late DateTime selectedDate;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedDate = DateTime.now();
-  }
-
-  void _changeMonth(int increment) {
-    setState(() {
-      DateTime newDate = DateTime(
-        selectedDate.year,
-        selectedDate.month + increment,
-      );
-
-      if (newDate.isAfter(DateTime.now())) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          AlertSnackbar.showErrorSnackbar(
-              context, "Tidak bisa memilih bulan di masa depan!");
-        });
-        return;
-      } else {
-        selectedDate = newDate;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final diagnosisProvider = Provider.of<DiagnosisProvider>(context);
+    final selectedDate = diagnosisProvider.selectedDate;
+
     return Scaffold(
-      appBar: CustomAppBar(title: "History Diagnosis",),
+      appBar: CustomAppBar(
+        title: "History Diagnosis",
+      ),
       backgroundColor: MyColor.themeColor,
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -79,7 +61,13 @@ class _HistoryDiagnosisPageState extends State<HistoryDiagnosisPage> {
                           IconButton(
                             icon: Icon(Icons.arrow_back_ios_new,
                                 size: 15, color: MyColor.secondary),
-                            onPressed: () => _changeMonth(-1),
+                            onPressed: () => diagnosisProvider
+                                .changeMonth(-1, context, onError: (error) {
+                              AlertSnackbar.showErrorSnackbar(
+                                context,
+                                error.toString(),
+                              );
+                            }),
                           ),
                           Text(
                             DateFormat(AppConstants.formatHistoryDiagnosa,
@@ -91,7 +79,13 @@ class _HistoryDiagnosisPageState extends State<HistoryDiagnosisPage> {
                           IconButton(
                             icon: Icon(Icons.arrow_forward_ios,
                                 size: 15, color: MyColor.secondary),
-                            onPressed: () => _changeMonth(1),
+                            onPressed: () => diagnosisProvider
+                                .changeMonth(1, context, onError: (error) {
+                              AlertSnackbar.showErrorSnackbar(
+                                context,
+                                error.toString(),
+                              );
+                            }),
                           ),
                         ],
                       ),
@@ -99,22 +93,54 @@ class _HistoryDiagnosisPageState extends State<HistoryDiagnosisPage> {
                   ],
                 )),
             const SizedBox(height: 16),
-            Expanded(
-              child: Center(
-                child: nullState(
-                  nullTitle: "Belum Ada Riwayat Diagnosis",
-                  description:
-                      "Mulai diagnosis untuk mengetahui kondisi udangmu.",
-                  buttonTitle: "Cek Diagnosis",
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => DiagnosisPage()),
-                    );
-                  },
-                ),
-              ),
-            ),
+            Consumer<DiagnosisProvider>(
+                builder: (context, diagnosisProvider, child) {
+              if (diagnosisProvider.diagnosis.isNotEmpty) {
+                return Skeletonizer(
+                  enabled: diagnosisProvider.isLoading,
+                  enableSwitchAnimation: true,
+                  child: Column(
+                    children: List.generate(
+                      diagnosisProvider.diagnosis.length,
+                      (index) {
+                        final disease = diagnosisProvider.diagnosis[index];
+                        return Column(
+                          children: [
+                            diagnosisCard(
+                                title: disease.nameDisease!,
+                                // image: disease.imageDisease!,
+                                image:
+                                    "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
+                                accuracy: double.parse(
+                                    disease.bestPercentageDisease!),
+                                date: disease.createdAt!,
+                                onTap: () {}),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                );
+              } else {
+                return Expanded(
+                  child: Center(
+                    child: nullState(
+                      nullTitle: "Belum Ada Riwayat Diagnosis Bulan Ini",
+                      description:
+                          "Mulai diagnosis untuk mengetahui kondisi udangmu.",
+                      buttonTitle: "Cek Diagnosis",
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DiagnosisPage()),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              }
+            }),
           ],
         ),
       ),

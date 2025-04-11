@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosis_provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
 import 'package:shrimp_care_mobileapp/features/home/providers/greeting_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
@@ -27,6 +28,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     context.read<DiseaseProvider>().fetchDiseases();
+    context.read<DiagnosisProvider>().fetchDiagnosis(
+          setLimit: 2,
+          startDate: null,
+          endDate: null,
+        );
   }
 
   Widget build(BuildContext context) {
@@ -241,13 +247,38 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         height: 5,
                       ),
-                      diagnosisCard(
-                          title: "Bintik Putih (White Spot Disease)",
-                          image:
-                              "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
-                          accuracy: 50,
-                          date: "22 Maret 2025",
-                          onTap: () {}),
+                      Consumer<DiagnosisProvider>(
+                          builder: (context, diagnosisProvider, child) {
+                        if (diagnosisProvider.diagnosis.isNotEmpty) {
+                          return Skeletonizer(
+                            enabled: diagnosisProvider.isLoading,
+                            enableSwitchAnimation: true,
+                            child: Column(
+                              children: List.generate(
+                                diagnosisProvider.diagnosis.length,
+                                (index) {
+                                  final disease =
+                                      diagnosisProvider.diagnosis[index];
+                                  return Column(
+                                    children: [
+                                      diagnosisCard(
+                                          title: disease.nameDisease!,
+                                          // image: disease.imageDisease!,
+                                          image:
+                                              "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
+                                            accuracy: double.parse(disease.bestPercentageDisease!),
+                                          date: disease.createdAt!,
+                                          onTap: () {}),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+                        } else {
+                          return nullState(nullTitle: "Belum ada data!");
+                        }
+                      }),
                       const SizedBox(
                         height: 20,
                       ),

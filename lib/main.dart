@@ -5,6 +5,7 @@ import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/login_provider.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/register_provider.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosis_provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
 import 'package:shrimp_care_mobileapp/features/home/providers/greeting_provider.dart';
 import 'package:shrimp_care_mobileapp/start/routes.dart';
@@ -38,6 +39,7 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => DiseaseProvider(),
         ),
+        ChangeNotifierProvider(create: (_) => DiagnosisProvider()),
       ],
       child: MaterialApp.router(
         routerConfig: router,
