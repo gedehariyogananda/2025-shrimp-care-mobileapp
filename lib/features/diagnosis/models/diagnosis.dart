@@ -1,0 +1,37 @@
+class Diagnosis {
+  String? id;
+  String? userId;
+  String? bestDiseaseId;
+  String? bestPercentageDisease;
+  String? createdAt;
+  String? nameDisease;
+
+  Diagnosis({
+    this.id,
+    this.userId,
+    this.bestDiseaseId,
+    this.bestPercentageDisease,
+    this.createdAt,
+    this.nameDisease,
+  });
+
+  Diagnosis.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    userId = json['user_id'];
+    bestDiseaseId = json['best_disease_id'];
+    bestPercentageDisease = json['best_percentage_disease'];
+    createdAt = json['created_at'];
+    nameDisease = json['disease']['name_disease'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = id;
+    data['user_id'] = userId;
+    data['best_disease_id'] = bestDiseaseId;
+    data['best_percentage_disease'] = bestPercentageDisease;
+    data['created_at'] = createdAt;
+    data['name_disease'] = nameDisease;
+    return data;
+  }
+}

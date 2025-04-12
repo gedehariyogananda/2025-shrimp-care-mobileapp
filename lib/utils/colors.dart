@@ -12,4 +12,6 @@ class MyColor {
   static const Color success = Color(0xff00D58A);
   static const Color softSuccess = Color(0xffE2F2F0);
   static const Color themeColor = Color(0xFFEDF1F7);
+
+  static const Color formInputBorder = Color(0xff8F9BB3);
 }
