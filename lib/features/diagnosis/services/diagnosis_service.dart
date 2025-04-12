@@ -16,7 +16,7 @@ class DiagnosisService {
   Future<List<Diagnosis>> getHistoryDiagnosis({
     String? startDate,
     String? endDate,
-    int? setLimit = 1000,
+    int? setLimit,
   }) async {
     try {
       final userId =
@@ -33,8 +33,6 @@ class DiagnosisService {
         'disease.fields': 'name_disease',
       };
 
-      print('Query ParamsS: $queryParams');
-
       if (startDate != null) {
         queryParams['created_at[gte]'] = startDate;
       }
@@ -48,8 +46,6 @@ class DiagnosisService {
         queryParameters: queryParams,
       );
       
-      print('response: ${res.toString()}');
-
       final data = res.data['data'] as List;
       if (data.isEmpty) {
         return [];

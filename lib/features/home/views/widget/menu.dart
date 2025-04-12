@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 
 Widget menu(BuildContext context) {
@@ -12,7 +14,10 @@ Widget menu(BuildContext context) {
         outsideColor: MyColor.softSuccess,
         title: 'Penyakit',
         onPressed: () {
-          context.pushNamed('disease');
+          context.pushNamed('disease').then((_) {
+            context.read<DiseaseProvider>().fetchDiseaseHomePage();
+            context.read<DiseaseProvider>().resetParams();
+          });
         },
       ),
       menuItem(

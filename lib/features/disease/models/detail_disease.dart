@@ -11,6 +11,7 @@ class DetailDisease {
   String? recomendationDisease;
 
   DetailDisease({
+    this.id,
     this.nameDisease,
     this.imageDisease,
     this.definitionDisease,
@@ -22,7 +23,7 @@ class DetailDisease {
   });
 
   DetailDisease.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['id'] ?? '';
     nameDisease = json['name_disease'];
     imageDisease = json['image_disease'];
     riskLevel = json['resk_level'];

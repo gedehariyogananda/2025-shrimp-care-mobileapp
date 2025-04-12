@@ -75,7 +75,6 @@ class DiagnosisProvider extends ChangeNotifier {
       } else {
         _diagnosis = [];
       }
-      print('Diagnosis: $_diagnosis');
       _isLoading = false;
       notifyListeners();
     } catch (e) {

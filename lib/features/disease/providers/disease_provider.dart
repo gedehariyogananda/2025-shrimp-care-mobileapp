@@ -15,12 +15,44 @@ class DiseaseProvider extends ChangeNotifier {
   DetailDisease _selectedDisease = DetailDisease();
   DetailDisease get selectedDisease => _selectedDisease;
 
-  Future<void> fetchDiseases() async {
+  String _prefixSort = '';
+  String get prefixSort => _prefixSort;
+
+  String _search = '';
+  String get search => _search;
+
+  void resetParams() {
+    _prefixSort = '';
+    _search = '';
+  }
+
+  void setSearch(String search) {
+    _search = search;
+    fetchDiseaseAll();
+  }
+
+  void setPrefixSort(String prefixSort) {
+    _prefixSort = prefixSort;
+    fetchDiseaseAll();
+  }
+
+  Future<void> fetchDiseases({
+    int setLimit = 10000,
+    bool withGteRiskLevel = false,
+    String prefixSort = "",
+    String search = "",
+  }) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      final diseases = await _diseaseService.getDiseasesHomePage();
+      final diseases = await _diseaseService.getDiseasesHomePage(
+        setLimit: setLimit,
+        prefixSort: prefixSort,
+        search: search,
+        withGteRiskLevel: withGteRiskLevel,
+      );
+
       if (diseases.isNotEmpty) {
         _diseases = diseases;
       } else {
@@ -34,6 +66,22 @@ class DiseaseProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void fetchDiseaseHomePage() {
+    fetchDiseases(
+      setLimit: 2,
+      withGteRiskLevel: true,
+      prefixSort: '-risk_level',
+    );
+  }
+
+  void fetchDiseaseAll() {
+    fetchDiseases(
+      setLimit: 10000,
+      prefixSort: prefixSort,
+      search: search,
+    );
   }
 
   Future<void> fetchDiseasesById(String id) async {

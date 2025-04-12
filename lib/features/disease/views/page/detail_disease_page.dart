@@ -10,8 +10,8 @@ import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class DetailDiseasePage extends StatefulWidget {
-  final String? id;
-  const DetailDiseasePage({super.key, this.id});
+  final String id;
+  const DetailDiseasePage({super.key, required this.id});
 
   @override
   State<DetailDiseasePage> createState() => _DetailDiseasePageState();
@@ -25,10 +25,8 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
   void initState() {
     super.initState();
     Future.microtask(() {
-      if (widget.id != null) {
-        Provider.of<DiseaseProvider>(context, listen: false)
-            .fetchDiseasesById(widget.id!);
-      }
+      Provider.of<DiseaseProvider>(context, listen: false)
+          .fetchDiseasesById(widget.id);
     });
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {

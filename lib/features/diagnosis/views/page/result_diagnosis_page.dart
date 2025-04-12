@@ -36,7 +36,9 @@ class ResultDiagnosisPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const DetailDiseasePage()),
+                        builder: (context) => const DetailDiseasePage(
+                              id: "TODO:ID",
+                            )),
                   );
                 }),
             SizedBox(height: 16),

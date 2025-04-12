@@ -8,10 +8,29 @@ class DiseaseService {
 
   DiseaseService(this.dioClient);
 
-  Future<List<Disease>> getDiseasesHomePage() async {
+  Future<List<Disease>> getDiseasesHomePage({
+    required int setLimit,
+    required String prefixSort,
+    required String search,
+    required bool withGteRiskLevel,
+  }) async {
     try {
+      final queryParams = {
+        'page': 1,
+        'limit': setLimit,
+        'sort': prefixSort,
+        'fields': 'id,definition_disease,name_disease,image_disease,risk_level',
+        'search[name_disease,code_disease,description]': search,
+      };
+
+      if (withGteRiskLevel) {
+        queryParams['risk_level[gte]'] = 4;
+      }
+
       final res = await dioClient.dio.get(
-          '/diseases?page=1&limit=2&risk_level[gte]=4&sort=-risk_level&fields=id,definition_disease,name_disease,image_disease,risk_level');
+        '/diseases',
+        queryParameters: queryParams,
+      );
 
       final data = res.data['data'] as List;
       if (data.isEmpty) {

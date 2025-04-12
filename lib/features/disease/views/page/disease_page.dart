@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
+import 'package:shrimp_care_mobileapp/features/disease/views/widget/disease_card.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
+import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class DiseasePage extends StatefulWidget {
   @override
@@ -9,88 +15,142 @@ class DiseasePage extends StatefulWidget {
 }
 
 class _DiseasePageState extends State<DiseasePage> {
-  String selectedSort = "Tinggi - Rendah";
+  String selectedSort = "";
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<DiseaseProvider>(context, listen: false).fetchDiseaseAll();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(title: "Penyakit"),
-      backgroundColor: MyColor.themeColor,
-      body: Column(
-        children: [
-          Container(
-            height: 130,
-            color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Penyakit Udang",
-                  style: MyTextStyle.text20.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 12),
-                Row(
+    return Consumer<DiseaseProvider>(builder: (context, diseaseProvider, _) {
+      return Scaffold(
+        appBar: CustomAppBar(title: "Penyakit"),
+        backgroundColor: MyColor.themeColor,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: 130,
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: TextField(
-                        onChanged: (value) {
-                          // TODO: Implement search function
-                        },
-                        decoration: InputDecoration(
-                          contentPadding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: "Cari..",
-                          hintStyle: TextStyle(color: Colors.grey),
-                          prefixIcon:
-                              Icon(Icons.search, color: Colors.grey.shade600),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: MyColor.primary),
-                          ),
-                        ),
+                    Text(
+                      "Penyakit Udang",
+                      style: MyTextStyle.text20.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
-                    SizedBox(width: 12),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey.shade300),
-                        color: Colors.white,
-                      ),
-                      child: IconButton(
-                        icon: Icon(Icons.tune, color: Colors.black),
-                        onPressed: () {
-                          _showSortBottomSheet(context);
-                        },
-                      ),
+                    SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            onChanged: (value) {
+                              diseaseProvider.setSearch(value);
+                            },
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 0),
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: "Cari..",
+                              hintStyle: TextStyle(color: Colors.grey),
+                              prefixIcon: Icon(Icons.search,
+                                  color: Colors.grey.shade600),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide:
+                                    BorderSide(color: Colors.grey.shade300),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide:
+                                    BorderSide(color: Colors.grey.shade300),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(color: MyColor.primary),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.grey.shade300),
+                            color: Colors.white,
+                          ),
+                          child: IconButton(
+                            icon: Icon(Icons.tune, color: Colors.black),
+                            onPressed: () {
+                              _showSortBottomSheet(context, diseaseProvider);
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: diseaseProvider.diseases.isEmpty
+                    ? Expanded(
+                        child: Center(
+                            child: nullState(nullTitle: "Belum ada data!")))
+                    : Skeletonizer(
+                        enabled: diseaseProvider.isLoading,
+                        enableSwitchAnimation: true,
+                        child: Column(
+                          children: List.generate(
+                            diseaseProvider.diseases.length,
+                            (index) {
+                              final disease = diseaseProvider.diseases[index];
+                              return Column(
+                                children: [
+                                  diseaseCard(
+                                    title: disease.nameDisease!,
+                                    // image: disease.imageDisease!,
+                                    image:
+                                        "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
+                                    risk: disease.riskLevel!,
+                                    description: disease.descriptionDisease!,
+                                    onTap: () {
+                                      context.pushNamed(
+                                        'detail_disease',
+                                        pathParameters: {
+                                          'id': disease.id!,
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ),
+      );
+    });
   }
 
-  void _showSortBottomSheet(BuildContext context) {
+  void _showSortBottomSheet(
+      BuildContext context, DiseaseProvider diseaseProvider) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -147,7 +207,7 @@ class _DiseasePageState extends State<DiseasePage> {
                     ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: Radio<String>(
-                        value: "Tinggi - Rendah",
+                        value: "-risk_level",
                         groupValue: selectedSort,
                         activeColor: MyColor.primary,
                         onChanged: (value) {
@@ -157,16 +217,11 @@ class _DiseasePageState extends State<DiseasePage> {
                         },
                       ),
                       title: Text("Tinggi - Rendah"),
-                      onTap: () {
-                        setModalState(() {
-                          selectedSort = "Tinggi - Rendah";
-                        });
-                      },
                     ),
                     ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: Radio<String>(
-                        value: "Rendah - Tinggi",
+                        value: "risk_level",
                         groupValue: selectedSort,
                         activeColor: MyColor.primary,
                         onChanged: (value) {
@@ -176,11 +231,6 @@ class _DiseasePageState extends State<DiseasePage> {
                         },
                       ),
                       title: Text("Rendah - Tinggi"),
-                      onTap: () {
-                        setModalState(() {
-                          selectedSort = "Rendah - Tinggi";
-                        });
-                      },
                     ),
                     SizedBox(height: 12),
                     SizedBox(
@@ -194,7 +244,12 @@ class _DiseasePageState extends State<DiseasePage> {
                           ),
                         ),
                         onPressed: () {
-                          setState(() {});
+                          final diseaseProvider = Provider.of<DiseaseProvider>(
+                              context,
+                              listen: false);
+
+                          diseaseProvider.setPrefixSort(selectedSort);
+
                           Navigator.pop(context);
                         },
                         child: Text(

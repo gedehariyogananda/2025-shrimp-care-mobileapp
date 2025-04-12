@@ -27,12 +27,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    context.read<DiseaseProvider>().fetchDiseases();
-    context.read<DiagnosisProvider>().fetchDiagnosis(
-          setLimit: 2,
-          startDate: null,
-          endDate: null,
-        );
+    Future.microtask(() {
+      context.read<DiseaseProvider>().fetchDiseaseHomePage();
+      context.read<DiagnosisProvider>().fetchDiagnosis(
+            setLimit: 2,
+            startDate: null,
+            endDate: null,
+          );
+    });
   }
 
   Widget build(BuildContext context) {
@@ -189,7 +191,14 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(height: 16),
                       textTopCard(
                         title: "Waspadai Penyakit Udang",
-                        onTap: () {},
+                        onTap: () {
+                          context.pushNamed('disease').then((_) {
+                            context
+                                .read<DiseaseProvider>()
+                                .fetchDiseaseHomePage();
+                            context.read<DiseaseProvider>().resetParams();
+                          });
+                        },
                       ),
                       const SizedBox(
                         height: 5,
@@ -217,12 +226,14 @@ class _HomePageState extends State<HomePage> {
                                         description:
                                             disease.descriptionDisease!,
                                         onTap: () {
-                                          context.pushNamed(
-                                            'detail_disease',
-                                            pathParameters: {
-                                              'id': disease.id!,
-                                            },
-                                          );
+                                          if (disease.id != null) {
+                                            context.pushNamed(
+                                              'detail_disease',
+                                              pathParameters: {
+                                                'id': disease.id!,
+                                              },
+                                            );
+                                          }
                                         },
                                       ),
                                     ],
@@ -266,7 +277,8 @@ class _HomePageState extends State<HomePage> {
                                           // image: disease.imageDisease!,
                                           image:
                                               "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
-                                            accuracy: double.parse(disease.bestPercentageDisease!),
+                                          accuracy: double.parse(
+                                              disease.bestPercentageDisease!),
                                           date: disease.createdAt!,
                                           onTap: () {}),
                                     ],
