@@ -35,3 +35,27 @@ class Diagnosis {
     return data;
   }
 }
+
+class ResultDiagnosis {
+  String? id;
+  String? diagnosisId;
+  String? diseaseId;
+  String? percentage;
+  String? nameDisease;
+
+  ResultDiagnosis({
+    this.id,
+    this.diagnosisId,
+    this.diseaseId,
+    this.percentage,
+    this.nameDisease,
+  });
+
+  ResultDiagnosis.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    diagnosisId = json['diagnosis_id'];
+    diseaseId = json['disease_id'];
+    percentage = json['percentage'];
+    nameDisease = json['disease']['name_disease'];
+  }
+}

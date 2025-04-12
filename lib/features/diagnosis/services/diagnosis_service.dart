@@ -45,7 +45,7 @@ class DiagnosisService {
         '/diagnosis',
         queryParameters: queryParams,
       );
-      
+
       final data = res.data['data'] as List;
       if (data.isEmpty) {
         return [];
@@ -54,6 +54,37 @@ class DiagnosisService {
       List<Diagnosis> historyDiagnosis =
           data.map((e) => Diagnosis.fromJson(e)).toList();
       return historyDiagnosis;
+    } catch (e) {
+      errorHandler(error: e);
+      rethrow;
+    }
+  }
+
+  Future<List<ResultDiagnosis>> getResultDiagnosis({
+    required String diagnosisId,
+  }) async {
+    try {
+      final queryParams = {
+        'diagnosis_id[eq]': diagnosisId,
+        'sort': '-percentage',
+        'embed': 'disease',
+        'fields': 'id,diagnosis_id,disease_id,percentage',
+        'disease.fields': 'name_disease',
+      };
+
+      final res = await dioClient.dio.get(
+        '/diagnosis-results',
+        queryParameters: queryParams,
+      );
+
+      final data = res.data['data'] as List;
+      if (data.isEmpty) {
+        return [];
+      }
+
+      List<ResultDiagnosis> resultDiagnosis =
+          data.map((e) => ResultDiagnosis.fromJson(e)).toList();
+      return resultDiagnosis;
     } catch (e) {
       errorHandler(error: e);
       rethrow;

@@ -14,8 +14,8 @@ class DiagnosisProvider extends ChangeNotifier {
   List<Diagnosis> _diagnosis = [];
   List<Diagnosis> get diagnosis => _diagnosis;
 
-  // DetailDisease _selectedDisease = DetailDisease();
-  // DetailDisease get selectedDisease => _selectedDisease;
+  List<ResultDiagnosis> _resultDiagnosis = [];
+  List<ResultDiagnosis> get resultDiagnosis => _resultDiagnosis;
 
   DateTime selectedDate = DateTime.now();
   DateTime get getSelectedDate => selectedDate;
@@ -75,6 +75,32 @@ class DiagnosisProvider extends ChangeNotifier {
       } else {
         _diagnosis = [];
       }
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      return null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchResultDiagnosis({
+    String? diagnosisId,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final resultDiagnosis =
+          await _diagnosisService.getResultDiagnosis(diagnosisId: diagnosisId!);
+
+      if (resultDiagnosis.isNotEmpty) {
+        _resultDiagnosis = resultDiagnosis;
+      } else {
+        _resultDiagnosis = [];
+      }
+
       _isLoading = false;
       notifyListeners();
     } catch (e) {

@@ -25,3 +25,21 @@ class Disease {
     return data;
   }
 }
+
+class Symptoms {
+  String? id;
+  String? codeSymptoms;
+  String? nameSymptoms;
+
+  Symptoms({
+    this.id,
+    this.codeSymptoms,
+    this.nameSymptoms,
+  });
+
+  Symptoms.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    codeSymptoms = json['code_symptom'];
+    nameSymptoms = json['name_symptom'];
+  }
+}
