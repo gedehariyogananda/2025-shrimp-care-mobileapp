@@ -7,6 +7,7 @@ import 'package:shrimp_care_mobileapp/base/components/widget/bottom_navigation.d
 import 'package:shrimp_care_mobileapp/features/auth/views/page/register_page.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/history_diagnosis_page.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/result_diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/features/disease/views/page/detail_disease_page.dart';
 import 'package:shrimp_care_mobileapp/features/disease/views/page/disease_page.dart';
 import 'package:shrimp_care_mobileapp/features/sampling/views/page/detail_sampling_page.dart';
@@ -61,6 +62,15 @@ final GoRouter router = GoRouter(routes: [
             );
           },
         ),
+        GoRoute(
+            path: 'detail_diagnosis/:id',
+            name: 'detail_diagnosis',
+            builder: (context, state) {
+              final id = state.pathParameters['id'];
+              return ResultDiagnosisPage(
+                id: id!,
+              );
+            }),
       ]),
   GoRoute(
     path: '/login',

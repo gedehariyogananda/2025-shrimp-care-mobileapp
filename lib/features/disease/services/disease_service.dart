@@ -60,4 +60,35 @@ class DiseaseService {
       rethrow;
     }
   }
+
+  Future<List<Symptoms>> getDiseaseDiagnosis({
+    String? search,
+  }) async {
+    try {
+      final queryParams = {
+        'fields': 'id,code_symptom,name_symptom',
+      };
+
+      if (search != null) {
+        queryParams['search[name_symptom]'] = search;
+      }
+
+      final res = await dioClient.dio.get(
+        '/symptoms',
+        queryParameters: queryParams,
+      );
+
+      final data = res.data['data'] as List;
+      if (data.isEmpty) {
+        return [];
+      }
+
+      List<Symptoms> diseaseDiagnosis =
+          data.map((e) => Symptoms.fromJson(e)).toList();
+      return diseaseDiagnosis;
+    } catch (e) {
+      errorHandler(error: e);
+      rethrow;
+    }
+  }
 }

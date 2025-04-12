@@ -280,7 +280,14 @@ class _HomePageState extends State<HomePage> {
                                           accuracy: double.parse(
                                               disease.bestPercentageDisease!),
                                           date: disease.createdAt!,
-                                          onTap: () {}),
+                                          onTap: () {
+                                            context.pushNamed(
+                                              'detail_diagnosis',
+                                              pathParameters: {
+                                                'id': disease.id!,
+                                              },
+                                            );
+                                          }),
                                     ],
                                   );
                                 },

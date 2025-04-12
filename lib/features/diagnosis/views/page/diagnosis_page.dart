@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/result_diagnosis_page.dart';
+import 'package:shrimp_care_mobileapp/features/disease/models/disease.dart';
+import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/alert_flushbar.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
@@ -18,116 +21,124 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
   List<String> filteredSymptoms = [];
   List<String> selectedSymptoms = [];
 
-  final List<String> symptoms = [
-    "Bintik Putih",
-    "Cangkang Lunak",
-    "Lemas",
-    "Berenang ke Permukaan",
-    "Tubuh Pucat",
-    "Mati Mendadak",
-    "Ekor Merah",
-    "Bercak Merah",
-    "Pertumbuhan Lambat",
-    "Perut atau Usus Kosong",
-    "Lendir Berlebih"
-  ];
+  // final List<String> symptoms = [
+  //   "Bintik Putih",
+  //   "Cangkang Lunak",
+  //   "Lemas",
+  //   "Berenang ke Permukaan",
+  //   "Tubuh Pucat",
+  //   "Mati Mendadak",
+  //   "Ekor Merah",
+  //   "Bercak Merah",
+  //   "Pertumbuhan Lambat",
+  //   "Perut atau Usus Kosong",
+  //   "Lendir Berlebih"
+  // ];
 
   @override
   void initState() {
     super.initState();
-    filteredSymptoms = symptoms;
+    Future.microtask(() {
+      Provider.of<DiseaseProvider>(context, listen: false).fetchSymtomps();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: CustomAppBar(title: "Diagnosis Gejala"),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildToggleButton(
-                    "Gejala", isGejalaSelected, selectedSymptoms.isNotEmpty,
-                    () {
-                  setState(() {
-                    isGejalaSelected = true;
-                  });
-                }),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: Container(
-                    height: 3,
-                    color: MyColor.primary,
-                  ),
-                ),
-                const SizedBox(width: 20),
-                _buildToggleButton("Threshold", !isGejalaSelected, false, () {
-                  setState(() {
-                    isGejalaSelected = false;
-                  });
-                }),
-              ],
-            ),
-            Expanded(
-              child: isGejalaSelected
-                  ? _buildGejalaSection()
-                  : _buildThresholdSection(),
-            ),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: Colors.white,
-              ),
-              padding: const EdgeInsets.all(16),
-              child: SafeArea(
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (selectedSymptoms.isEmpty) {
-                        AlertSnackbar.showErrorSnackbar(
-                            context, "Silahkan pilih gejala udangmu!");
-                        return;
-                      }
-                      await loadingScreen(
-                        context,
-                        title: "Kami sedang bekerja!",
-                        description:
-                            "Mohon tunggu sebentar, sistem kami sedang mencari hasil terbaik untuk kamu.  🚀",
-                      );
-
-                      await Future.delayed(Duration(seconds: 3));
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ResultDiagnosisPage()),
-                      );
-                    },
-                    child: Text(
-                      "Kirim",
-                      style: MyTextStyle.text16.copyWith(color: Colors.white),
+    return Consumer<DiseaseProvider>(builder: (context, diseaseProvider, _) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: CustomAppBar(title: "Diagnosis Gejala"),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildToggleButton(
+                      "Gejala", isGejalaSelected, selectedSymptoms.isNotEmpty,
+                      () {
+                    setState(() {
+                      isGejalaSelected = true;
+                    });
+                  }),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Container(
+                      height: 3,
+                      color: MyColor.primary,
                     ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: MyColor.primary,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                  ),
+                  const SizedBox(width: 20),
+                  _buildToggleButton("Threshold", !isGejalaSelected, false, () {
+                    setState(() {
+                      isGejalaSelected = false;
+                    });
+                  }),
+                ],
+              ),
+              Expanded(
+                child: isGejalaSelected
+                    ? _buildGejalaSection(
+                        diseaseProvider: diseaseProvider,
+                      )
+                    : _buildThresholdSection(),
+              ),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.white,
+                ),
+                padding: const EdgeInsets.all(16),
+                child: SafeArea(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (selectedSymptoms.isEmpty) {
+                          AlertSnackbar.showErrorSnackbar(
+                              context, "Silahkan pilih gejala udangmu!");
+                          return;
+                        }
+                        await loadingScreen(
+                          context,
+                          title: "Kami sedang bekerja!",
+                          description:
+                              "Mohon tunggu sebentar, sistem kami sedang mencari hasil terbaik untuk kamu.  🚀",
+                        );
+
+                        await Future.delayed(Duration(seconds: 3));
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ResultDiagnosisPage(
+                                    id: "TODO:ID",
+                                  )),
+                        );
+                      },
+                      child: Text(
+                        "Kirim",
+                        style: MyTextStyle.text16.copyWith(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: MyColor.primary,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildToggleButton(String title, bool isSelected,
@@ -170,7 +181,9 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
     );
   }
 
-  Widget _buildGejalaSection() {
+  Widget _buildGejalaSection({
+    DiseaseProvider? diseaseProvider,
+  }) {
     return Column(
       children: [
         const SizedBox(height: 8),
@@ -194,12 +207,7 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
         const SizedBox(height: 15),
         TextField(
           onChanged: (value) {
-            setState(() {
-              filteredSymptoms = symptoms
-                  .where((symptom) =>
-                      symptom.toLowerCase().contains(value.toLowerCase()))
-                  .toList();
-            });
+            diseaseProvider?.setSearchSymtomps(value);
           },
           decoration: InputDecoration(
             contentPadding:
@@ -225,15 +233,15 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
-            child: SymptomsGrid(
-              symptoms: filteredSymptoms,
-              selectedSymptoms: selectedSymptoms,
-              onSelect: (String symptom) {
+            child: _symptompsGrid(
+              symptoms: diseaseProvider?.allSymptoms ?? [],
+              selectedSymptomCodes: selectedSymptoms,
+              onSelect: (symptomCode) {
                 setState(() {
-                  if (selectedSymptoms.contains(symptom)) {
-                    selectedSymptoms.remove(symptom);
+                  if (selectedSymptoms.contains(symptomCode)) {
+                    selectedSymptoms.remove(symptomCode);
                   } else {
-                    selectedSymptoms.add(symptom);
+                    selectedSymptoms.add(symptomCode);
                   }
                 });
               },
@@ -326,29 +334,23 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
   }
 }
 
-class SymptomsGrid extends StatelessWidget {
-  final List<String> symptoms;
-  final List<String> selectedSymptoms;
-  final Function(String) onSelect;
-
-  const SymptomsGrid({
-    required this.symptoms,
-    required this.selectedSymptoms,
-    required this.onSelect,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
+Widget _symptompsGrid({
+  required List<Symptoms?> symptoms,
+  required List<String> selectedSymptomCodes,
+  required Function(String) onSelect,
+}) {
+  return SingleChildScrollView(
+    child: Wrap(
+      alignment: WrapAlignment.center,
       spacing: 8.0,
       runSpacing: 8.0,
       children: symptoms.map((symptom) {
-        final isSelected = selectedSymptoms.contains(symptom);
+        final isSelected = selectedSymptomCodes.contains(symptom?.codeSymptoms);
         return GestureDetector(
-          onTap: () => onSelect(symptom),
+          onTap: () => onSelect(symptom?.nameSymptoms ?? ""),
           child: IntrinsicWidth(
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
               decoration: BoxDecoration(
                 color: isSelected ? MyColor.primary : Colors.transparent,
                 borderRadius: BorderRadius.circular(16),
@@ -358,8 +360,8 @@ class SymptomsGrid extends StatelessWidget {
                 ),
               ),
               child: Text(
-                symptom,
-                style: MyTextStyle.text16.copyWith(
+                symptom?.nameSymptoms ?? "",
+                style: MyTextStyle.text14.copyWith(
                   color: isSelected ? Colors.white : Colors.black,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),
@@ -369,6 +371,6 @@ class SymptomsGrid extends StatelessWidget {
           ),
         );
       }).toList(),
-    );
-  }
+    ),
+  );
 }

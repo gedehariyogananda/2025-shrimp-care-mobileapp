@@ -1,13 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:shrimp_care_mobileapp/features/disease/views/page/detail_disease_page.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosis_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
+import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/widget/attention_card.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/widget/diagnosis_card.dart';
-import 'package:shrimp_care_mobileapp/utils/null_state.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
-class ResultDiagnosisPage extends StatelessWidget {
+class ResultDiagnosisPage extends StatefulWidget {
+  final String id;
+
+  const ResultDiagnosisPage({super.key, required this.id});
+
+  @override
+  State<ResultDiagnosisPage> createState() => _ResultDiagnosisPageState();
+}
+
+class _ResultDiagnosisPageState extends State<ResultDiagnosisPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      context.read<DiagnosisProvider>().fetchResultDiagnosis(
+            diagnosisId: widget.id,
+          );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,20 +49,46 @@ class ResultDiagnosisPage extends StatelessWidget {
               style: MyTextStyle.text14.copyWith(color: MyColor.secondary),
             ),
             SizedBox(height: 24),
-            diagnosisCard(
-                image:
-                    "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
-                title: "Bintik Hitam",
-                accuracy: 50,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const DetailDiseasePage(
-                              id: "TODO:ID",
-                            )),
-                  );
-                }),
+            Consumer<DiagnosisProvider>(
+                builder: (context, diagnosisProvider, child) {
+              if (diagnosisProvider.resultDiagnosis.isNotEmpty) {
+                return Skeletonizer(
+                  enabled: diagnosisProvider.isLoading,
+                  enableSwitchAnimation: true,
+                  child: Column(
+                    children: List.generate(
+                      diagnosisProvider.resultDiagnosis.length,
+                      (index) {
+                        final resultDiagnosis =
+                            diagnosisProvider.resultDiagnosis[index];
+                        return Column(
+                          children: [
+                            diagnosisCard(
+                              title: resultDiagnosis.nameDisease!,
+                              // image: disease.imageDisease!,
+                              image:
+                                  "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
+                              accuracy:
+                                  double.parse(resultDiagnosis.percentage!),
+                              onTap: () {
+                                context.pushNamed(
+                                  'detail_disease',
+                                  pathParameters: {
+                                    'id': resultDiagnosis.diseaseId!,
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                );
+              } else {
+                return nullState(nullTitle: "Belum ada data!");
+              }
+            }),
             SizedBox(height: 16),
             attentionCard(
                 isAlertDanger: false,
