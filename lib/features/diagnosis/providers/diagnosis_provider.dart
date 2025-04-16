@@ -110,21 +110,4 @@ class DiagnosisProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  // Future<void> fetchdiagnosisById(String id) async {
-  //   _isLoading = true;
-  //   notifyListeners();
-
-  //   try {
-  //     final disease = await _diagnosisService.getdiagnosisById(id);
-  //     _selectedDisease = disease;
-  //     _isLoading = false;
-  //     notifyListeners();
-  //   } catch (e) {
-  //     return null;
-  //   } finally {
-  //     _isLoading = false;
-  //     notifyListeners();
-  //   }
-  // }
 }

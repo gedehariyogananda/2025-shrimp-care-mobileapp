@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/providers/fc_diagnosis_provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/result_diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/features/disease/models/disease.dart';
-import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/alert_flushbar.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/widget/attention_card.dart';
 import 'package:shrimp_care_mobileapp/utils/loading_screen.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class DiagnosisPage extends StatefulWidget {
   @override
@@ -17,35 +18,19 @@ class DiagnosisPage extends StatefulWidget {
 
 class _DiagnosisPageState extends State<DiagnosisPage> {
   bool isGejalaSelected = true;
-  int thresholdValue = 60;
-  List<String> filteredSymptoms = [];
-  List<String> selectedSymptoms = [];
-
-  // final List<String> symptoms = [
-  //   "Bintik Putih",
-  //   "Cangkang Lunak",
-  //   "Lemas",
-  //   "Berenang ke Permukaan",
-  //   "Tubuh Pucat",
-  //   "Mati Mendadak",
-  //   "Ekor Merah",
-  //   "Bercak Merah",
-  //   "Pertumbuhan Lambat",
-  //   "Perut atau Usus Kosong",
-  //   "Lendir Berlebih"
-  // ];
 
   @override
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<DiseaseProvider>(context, listen: false).fetchSymtomps();
+      Provider.of<FcDiagnosisProvider>(context, listen: false).fetchSymtomps();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DiseaseProvider>(builder: (context, diseaseProvider, _) {
+    return Consumer<FcDiagnosisProvider>(
+        builder: (context, fcDiagnosisProvider, _) {
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: CustomAppBar(title: "Diagnosis Gejala"),
@@ -56,9 +41,8 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _buildToggleButton(
-                      "Gejala", isGejalaSelected, selectedSymptoms.isNotEmpty,
-                      () {
+                  _buildToggleButton("Gejala", isGejalaSelected,
+                      fcDiagnosisProvider.selectedSymptomCodes.isNotEmpty, () {
                     setState(() {
                       isGejalaSelected = true;
                     });
@@ -81,9 +65,11 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
               Expanded(
                 child: isGejalaSelected
                     ? _buildGejalaSection(
-                        diseaseProvider: diseaseProvider,
+                        fcDiagnosisProvider: fcDiagnosisProvider,
                       )
-                    : _buildThresholdSection(),
+                    : _buildThresholdSection(
+                        fcDiagnosisProvider: fcDiagnosisProvider,
+                      ),
               ),
               Container(
                 width: double.infinity,
@@ -97,7 +83,7 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () async {
-                        if (selectedSymptoms.isEmpty) {
+                        if (fcDiagnosisProvider.selectedSymptomCodes.isEmpty) {
                           AlertSnackbar.showErrorSnackbar(
                               context, "Silahkan pilih gejala udangmu!");
                           return;
@@ -182,7 +168,7 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
   }
 
   Widget _buildGejalaSection({
-    DiseaseProvider? diseaseProvider,
+    FcDiagnosisProvider? fcDiagnosisProvider,
   }) {
     return Column(
       children: [
@@ -207,7 +193,7 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
         const SizedBox(height: 15),
         TextField(
           onChanged: (value) {
-            diseaseProvider?.setSearchSymtomps(value);
+            fcDiagnosisProvider?.setSearchSymtomps(value);
           },
           decoration: InputDecoration(
             contentPadding:
@@ -234,16 +220,12 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: _symptompsGrid(
-              symptoms: diseaseProvider?.allSymptoms ?? [],
-              selectedSymptomCodes: selectedSymptoms,
+              isLoading: fcDiagnosisProvider?.isLoading ?? false,
+              symptoms: fcDiagnosisProvider?.allSymptoms ?? [],
+              selectedSymptomCodes:
+                  fcDiagnosisProvider?.selectedSymptomCodes ?? [],
               onSelect: (symptomCode) {
-                setState(() {
-                  if (selectedSymptoms.contains(symptomCode)) {
-                    selectedSymptoms.remove(symptomCode);
-                  } else {
-                    selectedSymptoms.add(symptomCode);
-                  }
-                });
+                fcDiagnosisProvider?.toggleSymptomCode(symptomCode);
               },
             ),
           ),
@@ -252,7 +234,9 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
     );
   }
 
-  Widget _buildThresholdSection() {
+  Widget _buildThresholdSection({
+    FcDiagnosisProvider? fcDiagnosisProvider,
+  }) {
     return Column(
       children: [
         const SizedBox(height: 24),
@@ -280,9 +264,10 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
           children: [
             GestureDetector(
               onTap: () {
-                setState(() {
-                  if (thresholdValue > 0) thresholdValue -= 10;
-                });
+                if ((fcDiagnosisProvider?.threshold ?? 0) > 0) {
+                  fcDiagnosisProvider?.setThreshold(
+                      (fcDiagnosisProvider?.threshold ?? 0) - 10);
+                }
               },
               child: Container(
                 padding: const EdgeInsets.all(8),
@@ -298,15 +283,16 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
             ),
             const SizedBox(width: 16),
             Text(
-              "$thresholdValue",
+              "${fcDiagnosisProvider?.threshold ?? 0}%",
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(width: 16),
             GestureDetector(
               onTap: () {
-                setState(() {
-                  if (thresholdValue < 100) thresholdValue += 10;
-                });
+                if ((fcDiagnosisProvider?.threshold ?? 0) < 100) {
+                  fcDiagnosisProvider?.setThreshold(
+                      (fcDiagnosisProvider?.threshold ?? 0) + 10);
+                }
               },
               child: Container(
                 padding: const EdgeInsets.all(8),
@@ -335,10 +321,34 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
 }
 
 Widget _symptompsGrid({
+  required bool isLoading,
   required List<Symptoms?> symptoms,
   required List<String> selectedSymptomCodes,
   required Function(String) onSelect,
 }) {
+  if (isLoading) {
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 8.0,
+      runSpacing: 8.0,
+      children: List.generate(20, (index) {
+        return IntrinsicWidth(
+          child: Skeletonizer(
+            enabled: true,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.grey.shade300, width: 1.5),
+              ),
+              child: const Text("................"),
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
   return SingleChildScrollView(
     child: Wrap(
       alignment: WrapAlignment.center,
@@ -347,7 +357,7 @@ Widget _symptompsGrid({
       children: symptoms.map((symptom) {
         final isSelected = selectedSymptomCodes.contains(symptom?.codeSymptoms);
         return GestureDetector(
-          onTap: () => onSelect(symptom?.nameSymptoms ?? ""),
+          onTap: () => onSelect(symptom?.codeSymptoms ?? ""),
           child: IntrinsicWidth(
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),

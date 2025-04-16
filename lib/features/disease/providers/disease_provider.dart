@@ -15,15 +15,6 @@ class DiseaseProvider extends ChangeNotifier {
   DetailDisease _selectedDisease = DetailDisease();
   DetailDisease get selectedDisease => _selectedDisease;
 
-  List<Symptoms> _allSymptoms = [];
-  List<Symptoms> get allSymptoms => _allSymptoms;
-
-  // final List<String> _selectedSymptoms = [];
-  // List<String> get selectedSymptoms => _selectedSymptoms;
-
-  String _searchSymptoms = '';
-  String get searchSymptoms => _searchSymptoms;
-
   String _prefixSort = '';
   String get prefixSort => _prefixSort;
 
@@ -38,11 +29,6 @@ class DiseaseProvider extends ChangeNotifier {
   void setSearch(String search) {
     _search = search;
     fetchDiseaseAll();
-  }
-
-  void setSearchSymtomps(String search) {
-    _searchSymptoms = search;
-    fetchSymtomps();
   }
 
   void setPrefixSort(String prefixSort) {
@@ -105,30 +91,6 @@ class DiseaseProvider extends ChangeNotifier {
     try {
       final disease = await _diseaseService.getDiseasesById(id);
       _selectedDisease = disease;
-      _isLoading = false;
-      notifyListeners();
-    } catch (e) {
-      return null;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> fetchSymtomps() async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      final diseaseDiagnosis = await _diseaseService.getDiseaseDiagnosis(
-        search: _searchSymptoms,
-      );
-      if (diseaseDiagnosis.isNotEmpty) {
-        _allSymptoms = diseaseDiagnosis;
-      } else {
-        _allSymptoms = [];
-      }
-      print('_allSymptoms: $_allSymptoms');
       _isLoading = false;
       notifyListeners();
     } catch (e) {

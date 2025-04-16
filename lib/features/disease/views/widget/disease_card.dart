@@ -29,12 +29,21 @@ Widget diseaseCard({
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
-                child: Image.network(
-                  image,
-                  width: 78,
-                  height: 88,
-                  fit: BoxFit.cover,
-                ),
+                child: image == "-"
+                    ? Container(
+                        width: 78,
+                        height: 88,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      )
+                    : Image.network(
+                        image,
+                        width: 78,
+                        height: 88,
+                        fit: BoxFit.cover,
+                      ),
               ),
               const SizedBox(width: 16),
               Expanded(

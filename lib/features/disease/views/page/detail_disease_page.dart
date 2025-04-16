@@ -44,6 +44,10 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
       body: Consumer<DiseaseProvider>(
           builder: (context, detailDiseaseProvider, child) {
         final detail = detailDiseaseProvider.selectedDisease;
+        if (detail.riskLevel == null) {
+          return SizedBox();
+        }
+
         final riskDetails = MyDisease.getRiskDetails(detail.riskLevel!);
 
         if (detailDiseaseProvider.diseases.isEmpty) {

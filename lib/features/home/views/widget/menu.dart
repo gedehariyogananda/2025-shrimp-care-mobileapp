@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/providers/fc_diagnosis_provider.dart';
+import 'package:shrimp_care_mobileapp/features/disease/models/disease.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 
@@ -26,7 +28,8 @@ Widget menu(BuildContext context) {
         outsideColor: MyColor.softPrimary,
         title: 'Diagnosis',
         onPressed: () {
-          context.pushNamed('diagnosis');
+          context.pushNamed('diagnosis').then(
+              (_) => {context.read<FcDiagnosisProvider>().resetSymptoms()});
         },
       ),
       menuItem(

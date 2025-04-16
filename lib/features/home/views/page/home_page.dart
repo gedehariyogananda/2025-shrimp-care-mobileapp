@@ -204,48 +204,66 @@ class _HomePageState extends State<HomePage> {
                         height: 5,
                       ),
                       Consumer<DiseaseProvider>(
-                          builder: (context, diseaseProvider, child) {
-                        if (diseaseProvider.diseases.isNotEmpty) {
-                          return Skeletonizer(
-                            enabled: diseaseProvider.isLoading,
-                            enableSwitchAnimation: true,
-                            child: Column(
-                              children: List.generate(
-                                diseaseProvider.diseases.length,
-                                (index) {
-                                  final disease =
-                                      diseaseProvider.diseases[index];
-                                  return Column(
-                                    children: [
-                                      diseaseCard(
-                                        title: disease.nameDisease!,
-                                        // image: disease.imageDisease!,
-                                        image:
-                                            "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
-                                        risk: disease.riskLevel!,
-                                        description:
-                                            disease.descriptionDisease!,
-                                        onTap: () {
-                                          if (disease.id != null) {
-                                            context.pushNamed(
-                                              'detail_disease',
-                                              pathParameters: {
-                                                'id': disease.id!,
-                                              },
-                                            );
-                                          }
-                                        },
+                        builder: (context, diseaseProvider, child) =>
+                            diseaseProvider.isLoading
+                                ? Column(
+                                    children: List.generate(2, (index) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 12),
+                                        child: Skeletonizer(
+                                          enableSwitchAnimation: true,
+                                          enabled: diseaseProvider.isLoading,
+                                          child: diseaseCard(
+                                            image: "-",
+                                            title: "---------------",
+                                            description: "--------------",
+                                            risk: 0,
+                                            onTap: () {},
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  )
+                                : (diseaseProvider.diseases.isEmpty)
+                                    ? nullState(nullTitle: "Belum ada data!")
+                                    : Skeletonizer(
+                                        enableSwitchAnimation: true,
+                                        enabled: diseaseProvider.isLoading,
+                                        child: Column(
+                                          children: List.generate(
+                                            diseaseProvider.diseases.length,
+                                            (index) {
+                                              final disease = diseaseProvider
+                                                  .diseases[index];
+                                              return Column(
+                                                children: [
+                                                  diseaseCard(
+                                                    title: disease.nameDisease!,
+                                                    // image: disease.imageDisease!,
+                                                    image:
+                                                        "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
+                                                    risk: disease.riskLevel!,
+                                                    description: disease
+                                                        .descriptionDisease!,
+                                                    onTap: () {
+                                                      if (disease.id != null) {
+                                                        context.pushNamed(
+                                                          'detail_disease',
+                                                          pathParameters: {
+                                                            'id': disease.id!,
+                                                          },
+                                                        );
+                                                      }
+                                                    },
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          ),
+                                        ),
                                       ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            ),
-                          );
-                        } else {
-                          return nullState(nullTitle: "Belum ada data!");
-                        }
-                      }),
+                      ),
                       const SizedBox(
                         height: 10,
                       ),
@@ -259,45 +277,58 @@ class _HomePageState extends State<HomePage> {
                         height: 5,
                       ),
                       Consumer<DiagnosisProvider>(
-                          builder: (context, diagnosisProvider, child) {
-                        if (diagnosisProvider.diagnosis.isNotEmpty) {
-                          return Skeletonizer(
-                            enabled: diagnosisProvider.isLoading,
-                            enableSwitchAnimation: true,
-                            child: Column(
-                              children: List.generate(
-                                diagnosisProvider.diagnosis.length,
-                                (index) {
-                                  final disease =
-                                      diagnosisProvider.diagnosis[index];
-                                  return Column(
-                                    children: [
-                                      diagnosisCard(
-                                          title: disease.nameDisease!,
-                                          // image: disease.imageDisease!,
-                                          image:
-                                              "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
-                                          accuracy: double.parse(
-                                              disease.bestPercentageDisease!),
-                                          date: disease.createdAt!,
-                                          onTap: () {
-                                            context.pushNamed(
-                                              'detail_diagnosis',
-                                              pathParameters: {
-                                                'id': disease.id!,
-                                              },
+                        builder: (context, diagnosisProvider, child) =>
+                            diagnosisProvider.isLoading
+                                ? Column(
+                                    children: List.generate(2, (index) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 8),
+                                        child: Skeletonizer(
+                                          enableSwitchAnimation: true,
+                                          enabled: true,
+                                          child: diagnosisCard(
+                                            image: "-",
+                                            title: "------------------",
+                                            accuracy: 0,
+                                            onTap: () {},
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  )
+                                : (diagnosisProvider.diagnosis.isEmpty)
+                                    ? nullState(nullTitle: "Belum ada data!")
+                                    : Column(
+                                        children: List.generate(
+                                          diagnosisProvider.diagnosis.length,
+                                          (index) {
+                                            final disease = diagnosisProvider
+                                                .diagnosis[index];
+                                            return Column(
+                                              children: [
+                                                diagnosisCard(
+                                                    title: disease.nameDisease!,
+                                                    // image: disease.imageDisease!,
+                                                    image:
+                                                        "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
+                                                    accuracy: double.parse(disease
+                                                        .bestPercentageDisease!),
+                                                    date: disease.createdAt!,
+                                                    onTap: () {
+                                                      context.pushNamed(
+                                                        'detail_diagnosis',
+                                                        pathParameters: {
+                                                          'id': disease.id!,
+                                                        },
+                                                      );
+                                                    }),
+                                              ],
                                             );
-                                          }),
-                                    ],
-                                  );
-                                },
-                              ),
-                            ),
-                          );
-                        } else {
-                          return nullState(nullTitle: "Belum ada data!");
-                        }
-                      }),
+                                          },
+                                        ),
+                                      ),
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -312,3 +343,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+// ISLOADING ? SKELETON(..) : ISEMPTY ? NULLSTATE : DATA
