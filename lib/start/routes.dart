@@ -20,6 +20,7 @@ final GoRouter router = GoRouter(routes: [
       }),
   GoRoute(
       path: '/home_page',
+      name: 'home_page',
       builder: (context, state) {
         return BottomNavigation();
       },

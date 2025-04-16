@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/providers/fc_diagnosis_provider.dart';
-import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/result_diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/features/disease/models/disease.dart';
 import 'package:shrimp_care_mobileapp/utils/alert_flushbar.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
@@ -88,6 +88,7 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
                               context, "Silahkan pilih gejala udangmu!");
                           return;
                         }
+
                         await loadingScreen(
                           context,
                           title: "Kami sedang bekerja!",
@@ -95,14 +96,28 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
                               "Mohon tunggu sebentar, sistem kami sedang mencari hasil terbaik untuk kamu.  🚀",
                         );
 
-                        await Future.delayed(Duration(seconds: 3));
+                        final diagnosisId =
+                            await fcDiagnosisProvider.forwardChaining(
+                          onError: (error) {
+                            AlertSnackbar.showErrorSnackbar(
+                              context,
+                              error,
+                            );
+                          },
+                        );
+
                         Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ResultDiagnosisPage(
-                                    id: "TODO:ID",
-                                  )),
+                        // context.goNamed(
+                        //   'detail_diagnosis',
+                        //   pathParameters: {
+                        //     'id': diagnosisId.toString(),
+                        //   },
+                        // );
+                        context.pushNamed(
+                          'detail_diagnosis',
+                          pathParameters: {
+                            'id': diagnosisId.toString(),
+                          },
                         );
                       },
                       child: Text(

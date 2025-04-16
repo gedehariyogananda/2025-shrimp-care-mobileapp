@@ -70,6 +70,7 @@ class DiagnosisProvider extends ChangeNotifier {
         endDate: endDate,
         setLimit: setLimit,
       );
+
       if (diagnosis.isNotEmpty) {
         _diagnosis = diagnosis;
       } else {

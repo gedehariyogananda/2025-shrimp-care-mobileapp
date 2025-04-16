@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shrimp_care_mobileapp/config/dio_client.dart';
+import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/services/diagnosis_service.dart';
 import 'package:shrimp_care_mobileapp/features/disease/models/disease.dart';
 import 'package:shrimp_care_mobileapp/features/disease/services/disease_service.dart';
 
 class FcDiagnosisProvider extends ChangeNotifier {
   final DiseaseService _diseaseService = DiseaseService(DioClient());
+  final DiagnosisService _diagnosisService =
+      DiagnosisService(dioClient: DioClient(), tokenProvider: TokenProvider());
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -50,6 +55,33 @@ class FcDiagnosisProvider extends ChangeNotifier {
       "symtoms": _selectedSymptomCodes,
       "threshold": _threshold,
     };
+  }
+
+  Future<String> forwardChaining({
+    Function(String error)? onError,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final res = await _diagnosisService.postDiagnosis(
+        payload: buildDiagnosisPayload(),
+      );
+
+      _isLoading = false;
+      notifyListeners();
+
+      return res;
+    } catch (e) {
+      _isLoading = false;
+      notifyListeners();
+      if (e is String) {
+        onError?.call(e);
+      } else {
+        onError?.call("Terjadi kesalahan, silahkan coba lagi.");
+      }
+      return "Terjadi kesalahan, silahkan coba lagi.";
+    }
   }
 
   Future<void> fetchSymtomps() async {

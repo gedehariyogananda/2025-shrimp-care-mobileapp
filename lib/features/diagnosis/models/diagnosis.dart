@@ -18,10 +18,10 @@ class Diagnosis {
   Diagnosis.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
-    bestDiseaseId = json['best_disease_id'];
-    bestPercentageDisease = json['best_percentage_disease'];
+    bestDiseaseId = json['best_disease_id'] ?? "Tidak ada id penyakit";
+    bestPercentageDisease = json['best_percentage_disease'] ?? "0.0";
     createdAt = json['created_at'];
-    nameDisease = json['disease']['name_disease'];
+    nameDisease = json['disease']?['name_disease'] ?? "Tidak ada nama penyakit";
   }
 
   Map<String, dynamic> toJson() {

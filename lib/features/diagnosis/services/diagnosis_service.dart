@@ -90,4 +90,21 @@ class DiagnosisService {
       rethrow;
     }
   }
+
+  Future<String> postDiagnosis({
+    required Map<String, dynamic> payload,
+  }) async {
+    try {
+      final res = await dioClient.dio.post(
+        '/set/disease-shrimp',
+        data: payload,
+      );
+
+      final data = res.data['data'];
+      return data['diagnosis_id'];
+    } catch (e) {
+      errorHandler(error: e);
+      rethrow;
+    }
+  }
 }

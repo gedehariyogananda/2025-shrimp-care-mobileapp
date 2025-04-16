@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosis_provider.dart';
+import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
@@ -33,7 +34,20 @@ class _ResultDiagnosisPageState extends State<ResultDiagnosisPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Hasil Diagnosis Ditemukan!"),
+      appBar: CustomAppBar(
+        leading: true,
+        onLeadingPressed: () {
+          Provider.of<DiseaseProvider>(context, listen: false)
+              .fetchDiseaseHomePage();
+          Provider.of<DiagnosisProvider>(context, listen: false).fetchDiagnosis(
+            setLimit: 2,
+            startDate: null,
+            endDate: null,
+          );
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        },
+        title: "Hasil Diagnosis Ditemukan!",
+      ),
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Column(

@@ -28,12 +28,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      context.read<DiseaseProvider>().fetchDiseaseHomePage();
-      context.read<DiagnosisProvider>().fetchDiagnosis(
-            setLimit: 2,
-            startDate: null,
-            endDate: null,
-          );
+      Provider.of<DiseaseProvider>(context, listen: false)
+          .fetchDiseaseHomePage();
+      Provider.of<DiagnosisProvider>(context, listen: false).fetchDiagnosis(
+        setLimit: 2,
+        startDate: null,
+        endDate: null,
+      );
     });
   }
 
@@ -343,5 +344,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-// ISLOADING ? SKELETON(..) : ISEMPTY ? NULLSTATE : DATA
