@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shrimp_care_mobileapp/config/dio_client.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/models/diagnosis.dart';
@@ -13,6 +14,9 @@ class DiagnosisProvider extends ChangeNotifier {
 
   List<Diagnosis> _diagnosis = [];
   List<Diagnosis> get diagnosis => _diagnosis;
+
+  List<Diagnosis> _allDiagnosis = [];
+  List<Diagnosis> get allDiagnosis => _allDiagnosis;
 
   List<ResultDiagnosis> _resultDiagnosis = [];
   List<ResultDiagnosis> get resultDiagnosis => _resultDiagnosis;
@@ -29,7 +33,7 @@ class DiagnosisProvider extends ChangeNotifier {
     int increment,
     BuildContext context, {
     Function(String error)? onError,
-  }) {
+  }) async {
     DateTime newDate = DateTime(
       selectedDate.year,
       selectedDate.month + increment,
@@ -39,20 +43,13 @@ class DiagnosisProvider extends ChangeNotifier {
       onError?.call("Tidak bisa memilih bulan di masa depan!");
       return;
     }
-    final startDate = '${newDate.year}-${newDate.month}-01';
-    final endDate = '${newDate.year}-${newDate.month + 1}-01';
 
     setSelectedDate(newDate);
 
     try {
-      fetchDiagnosis(
-        startDate: startDate,
-        endDate: endDate,
-      );
+      await fetchDiagnosisBySelectedDate();
     } catch (e) {
       onError?.call(e.toString());
-    } finally {
-      notifyListeners();
     }
   }
 
@@ -110,5 +107,48 @@ class DiagnosisProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> fetchAllDiagnosis({
+    String? startDate,
+    String? endDate,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final allDiagnosis = await _diagnosisService.getHistoryDiagnosis(
+        startDate: startDate,
+        endDate: endDate,
+        setLimit: 1000,
+      );
+
+      if (allDiagnosis.isNotEmpty) {
+        _allDiagnosis = allDiagnosis;
+      } else {
+        _allDiagnosis = [];
+      }
+
+      var length = allDiagnosis.length;
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      return null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchDiagnosisBySelectedDate() async {
+    final startDate = DateFormat('yyyy-MM-01').format(selectedDate);
+    final endDate = DateFormat('yyyy-MM-01').format(
+      DateTime(selectedDate.year, selectedDate.month + 1),
+    );
+
+    await fetchAllDiagnosis(
+      startDate: startDate,
+      endDate: endDate,
+    );
   }
 }

@@ -63,57 +63,62 @@ class _ResultDiagnosisPageState extends State<ResultDiagnosisPage> {
               style: MyTextStyle.text14.copyWith(color: MyColor.secondary),
             ),
             SizedBox(height: 24),
-            Consumer<DiagnosisProvider>(
-              builder: (context, diagnosisProvider, child) =>
-                  diagnosisProvider.isLoading
-                      ? Column(
-                          children: List.generate(3, (index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: Skeletonizer(
-                                enableSwitchAnimation: true,
-                                enabled: true,
-                                child: diagnosisCard(
-                                  title: "-----------",
-                                  image: "-",
-                                  accuracy: 0,
-                                  onTap: () {},
-                                ),
-                              ),
-                            );
-                          }),
-                        )
-                      : (diagnosisProvider.resultDiagnosis.isEmpty
-                          ? nullState(nullTitle: "Belum ada data!")
-                          : Column(
-                              children: List.generate(
-                                diagnosisProvider.resultDiagnosis.length,
-                                (index) {
-                                  final resultDiagnosis =
-                                      diagnosisProvider.resultDiagnosis[index];
-                                  return Column(
-                                    children: [
-                                      diagnosisCard(
-                                        title: resultDiagnosis.nameDisease!,
-                                        // image: disease.imageDisease!,
-                                        image:
-                                            "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
-                                        accuracy: double.parse(
-                                            resultDiagnosis.percentage!),
-                                        onTap: () {
-                                          context.pushNamed(
-                                            'detail_disease',
-                                            pathParameters: {
-                                              'id': resultDiagnosis.diseaseId!,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Consumer<DiagnosisProvider>(
+                  builder: (context, diagnosisProvider, child) =>
+                      diagnosisProvider.isLoading
+                          ? Column(
+                              children: List.generate(3, (index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: Skeletonizer(
+                                    enableSwitchAnimation: true,
+                                    enabled: true,
+                                    child: diagnosisCard(
+                                      title: "-----------",
+                                      image: "-",
+                                      accuracy: 0,
+                                      onTap: () {},
+                                    ),
+                                  ),
+                                );
+                              }),
+                            )
+                          : (diagnosisProvider.resultDiagnosis.isEmpty
+                              ? nullState(nullTitle: "Belum ada data!")
+                              : Column(
+                                  children: List.generate(
+                                    diagnosisProvider.resultDiagnosis.length,
+                                    (index) {
+                                      final resultDiagnosis = diagnosisProvider
+                                          .resultDiagnosis[index];
+                                      return Column(
+                                        children: [
+                                          diagnosisCard(
+                                            title: resultDiagnosis.nameDisease!,
+                                            // image: disease.imageDisease!,
+                                            image:
+                                                "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
+                                            accuracy: double.parse(
+                                                resultDiagnosis.percentage!),
+                                            onTap: () {
+                                              context.pushNamed(
+                                                'detail_disease',
+                                                pathParameters: {
+                                                  'id': resultDiagnosis
+                                                      .diseaseId!,
+                                                },
+                                              );
                                             },
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            )),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                )),
+                ),
+              ),
             ),
             SizedBox(height: 16),
             attentionCard(

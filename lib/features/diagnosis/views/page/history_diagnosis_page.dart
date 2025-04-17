@@ -19,9 +19,17 @@ class HistoryDiagnosisPage extends StatefulWidget {
 
 class _HistoryDiagnosisPageState extends State<HistoryDiagnosisPage> {
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      context.read<DiagnosisProvider>().fetchDiagnosisBySelectedDate();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final diagnosisProvider = Provider.of<DiagnosisProvider>(context);
-    final selectedDate = diagnosisProvider.selectedDate;
+    final selectedDate = diagnosisProvider.getSelectedDate;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -93,54 +101,67 @@ class _HistoryDiagnosisPageState extends State<HistoryDiagnosisPage> {
                   ],
                 )),
             const SizedBox(height: 16),
-            Consumer<DiagnosisProvider>(
-                builder: (context, diagnosisProvider, child) {
-              if (diagnosisProvider.diagnosis.isNotEmpty) {
-                return Skeletonizer(
-                  enabled: diagnosisProvider.isLoading,
-                  enableSwitchAnimation: true,
-                  child: Column(
-                    children: List.generate(
-                      diagnosisProvider.diagnosis.length,
-                      (index) {
-                        final disease = diagnosisProvider.diagnosis[index];
-                        return Column(
-                          children: [
-                            diagnosisCard(
-                                title: disease.nameDisease!,
-                                // image: disease.imageDisease!,
-                                image:
-                                    "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
-                                accuracy: double.parse(
-                                    disease.bestPercentageDisease!),
-                                date: disease.createdAt!,
-                                onTap: () {}),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                );
-              } else {
-                return Expanded(
-                  child: Center(
-                    child: nullState(
-                      nullTitle: "Belum Ada Riwayat Diagnosis Bulan Ini",
-                      description:
-                          "Mulai diagnosis untuk mengetahui kondisi udangmu.",
-                      buttonTitle: "Cek Diagnosis",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DiagnosisPage()),
-                        );
-                      },
-                    ),
-                  ),
-                );
-              }
-            }),
+            Expanded(
+              child: Consumer<DiagnosisProvider>(
+                builder: (context, diagnosisProvider, child) =>
+                    diagnosisProvider.isLoading
+                        ? ListView.builder(
+                            itemCount: 6,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: Skeletonizer(
+                                  enabled: true,
+                                  child: diagnosisCard(
+                                    title: "-----------",
+                                    image: "-",
+                                    accuracy: 0,
+                                    onTap: () {},
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : diagnosisProvider.allDiagnosis.isEmpty
+                            ? SingleChildScrollView(
+                                child: nullState(
+                                  nullTitle:
+                                      "Belum Ada Riwayat Diagnosis Bulan Ini",
+                                  description:
+                                      "Mulai diagnosis untuk mengetahui kondisi udangmu.",
+                                  buttonTitle: "Cek Diagnosis",
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              DiagnosisPage()),
+                                    );
+                                  },
+                                ),
+                              )
+                            : ListView.builder(
+                                itemCount:
+                                    diagnosisProvider.allDiagnosis.length,
+                                itemBuilder: (context, index) {
+                                  final disease =
+                                      diagnosisProvider.allDiagnosis[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 5),
+                                    child: diagnosisCard(
+                                      title: disease.nameDisease!,
+                                      image:
+                                          "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
+                                      accuracy: double.parse(
+                                          disease.bestPercentageDisease!),
+                                      date: disease.createdAt!,
+                                      onTap: () {},
+                                    ),
+                                  );
+                                },
+                              ),
+              ),
+            ),
           ],
         ),
       ),
