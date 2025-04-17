@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shrimp_care_mobileapp/config/dio_client.dart';
+import 'package:shrimp_care_mobileapp/exception/app_exception.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/services/diagnosis_service.dart';
 import 'package:shrimp_care_mobileapp/features/disease/models/disease.dart';
@@ -57,7 +58,7 @@ class FcDiagnosisProvider extends ChangeNotifier {
     };
   }
 
-  Future<String> forwardChaining({
+  Future<String?> forwardChaining({
     Function(String error)? onError,
   }) async {
     _isLoading = true;
@@ -72,7 +73,14 @@ class FcDiagnosisProvider extends ChangeNotifier {
       notifyListeners();
 
       return res;
+    } on AppExceptions catch (e) {
+      print("error: ${e.message}");
+      _isLoading = false;
+      onError?.call(e.message!);
+      notifyListeners();
+      return null;
     } catch (e) {
+      print("error: $e");
       _isLoading = false;
       notifyListeners();
       if (e is String) {
@@ -80,7 +88,7 @@ class FcDiagnosisProvider extends ChangeNotifier {
       } else {
         onError?.call("Terjadi kesalahan, silahkan coba lagi.");
       }
-      return "Terjadi kesalahan, silahkan coba lagi.";
+      return null;
     }
   }
 

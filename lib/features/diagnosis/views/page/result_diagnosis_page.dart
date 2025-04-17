@@ -37,13 +37,16 @@ class _ResultDiagnosisPageState extends State<ResultDiagnosisPage> {
       appBar: CustomAppBar(
         leading: true,
         onLeadingPressed: () {
-          Provider.of<DiseaseProvider>(context, listen: false)
-              .fetchDiseaseHomePage();
-          Provider.of<DiagnosisProvider>(context, listen: false).fetchDiagnosis(
-            setLimit: 2,
-            startDate: null,
-            endDate: null,
-          );
+          Future.microtask(() {
+            Provider.of<DiseaseProvider>(context, listen: false)
+                .fetchDiseaseHomePage();
+            Provider.of<DiagnosisProvider>(context, listen: false)
+                .fetchDiagnosis(
+              setLimit: 2,
+              startDate: null,
+              endDate: null,
+            );
+          });
           Navigator.of(context).popUntil((route) => route.isFirst);
         },
         title: "Hasil Diagnosis Ditemukan!",
@@ -62,7 +65,7 @@ class _ResultDiagnosisPageState extends State<ResultDiagnosisPage> {
               "Berikut hasil penyakit yang paling sesuai dengan kondisi udangmu. Pilih yang paling cocok untuk mengetahui lebih lanjut!",
               style: MyTextStyle.text14.copyWith(color: MyColor.secondary),
             ),
-            SizedBox(height: 24),
+            SizedBox(height: 20),
             Expanded(
               child: SingleChildScrollView(
                 child: Consumer<DiagnosisProvider>(

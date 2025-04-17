@@ -99,26 +99,23 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
                         final diagnosisId =
                             await fcDiagnosisProvider.forwardChaining(
                           onError: (error) {
-                            AlertSnackbar.showErrorSnackbar(
-                              context,
-                              error,
+                            Navigator.pop(context);
+                            context.pushNamed(
+                              'result_nan_diagnosis',
+                              extra: error.toString(),
                             );
                           },
                         );
 
-                        Navigator.pop(context);
-                        // context.goNamed(
-                        //   'detail_diagnosis',
-                        //   pathParameters: {
-                        //     'id': diagnosisId.toString(),
-                        //   },
-                        // );
-                        context.pushNamed(
-                          'detail_diagnosis',
-                          pathParameters: {
-                            'id': diagnosisId.toString(),
-                          },
-                        );
+                        if (diagnosisId != null) {
+                          Navigator.pop(context);
+                          context.pushNamed(
+                            'detail_diagnosis',
+                            pathParameters: {
+                              'id': diagnosisId.toString(),
+                            },
+                          );
+                        }
                       },
                       child: Text(
                         "Kirim",
