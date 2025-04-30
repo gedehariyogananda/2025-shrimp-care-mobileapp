@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
@@ -150,12 +151,20 @@ class _HistoryDiagnosisPageState extends State<HistoryDiagnosisPage> {
                                     padding: const EdgeInsets.only(bottom: 5),
                                     child: diagnosisCard(
                                       title: disease.nameDisease!,
-                                      image:
-                                          "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
+                                      image: disease.imageDisease!,
+                                      // image:
+                                      //     "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
                                       accuracy: double.parse(
                                           disease.bestPercentageDisease!),
                                       date: disease.createdAt!,
-                                      onTap: () {},
+                                      onTap: () {
+                                        context.pushNamed(
+                                          'detail_diagnosis',
+                                          pathParameters: {
+                                            'id': disease.id!,
+                                          },
+                                        );
+                                      },
                                     ),
                                   );
                                 },

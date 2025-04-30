@@ -30,7 +30,7 @@ class DiagnosisService {
         'embed': 'disease',
         'fields':
             'id,user_id,best_disease_id,best_percentage_disease,created_at',
-        'disease.fields': 'name_disease',
+        'disease.fields': 'name_disease,image_disease',
       };
 
       if (startDate != null) {
@@ -51,6 +51,8 @@ class DiagnosisService {
         return [];
       }
 
+      print("Data: $data");
+
       List<Diagnosis> historyDiagnosis =
           data.map((e) => Diagnosis.fromJson(e)).toList();
       return historyDiagnosis;
@@ -69,7 +71,7 @@ class DiagnosisService {
         'sort': '-percentage',
         'embed': 'disease',
         'fields': 'id,diagnosis_id,disease_id,percentage',
-        'disease.fields': 'name_disease',
+        'disease.fields': 'name_disease,image_disease',
       };
 
       final res = await dioClient.dio.get(

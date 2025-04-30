@@ -241,9 +241,10 @@ class _HomePageState extends State<HomePage> {
                                                 children: [
                                                   diseaseCard(
                                                     title: disease.nameDisease!,
-                                                    // image: disease.imageDisease!,
                                                     image:
-                                                        "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
+                                                        disease.imageDisease!,
+                                                    // image:
+                                                    //     "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
                                                     risk: disease.riskLevel!,
                                                     description: disease
                                                         .descriptionDisease!,
@@ -254,7 +255,12 @@ class _HomePageState extends State<HomePage> {
                                                           pathParameters: {
                                                             'id': disease.id!,
                                                           },
-                                                        );
+                                                        ).then((_) => {
+                                                              context
+                                                                  .read<
+                                                                      DiseaseProvider>()
+                                                                  .clearSelectedDisease(),
+                                                            });
                                                       }
                                                     },
                                                   ),
@@ -310,9 +316,10 @@ class _HomePageState extends State<HomePage> {
                                               children: [
                                                 diagnosisCard(
                                                     title: disease.nameDisease!,
-                                                    // image: disease.imageDisease!,
                                                     image:
-                                                        "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
+                                                        disease.imageDisease!,
+                                                    // image:
+                                                    //     "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
                                                     accuracy: double.parse(disease
                                                         .bestPercentageDisease!),
                                                     date: disease.createdAt!,

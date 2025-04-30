@@ -1,3 +1,5 @@
+import 'package:shrimp_care_mobileapp/config/api_server.dart';
+
 class Diagnosis {
   String? id;
   String? userId;
@@ -5,6 +7,7 @@ class Diagnosis {
   String? bestPercentageDisease;
   String? createdAt;
   String? nameDisease;
+  String? imageDisease;
 
   Diagnosis({
     this.id,
@@ -13,6 +16,7 @@ class Diagnosis {
     this.bestPercentageDisease,
     this.createdAt,
     this.nameDisease,
+    this.imageDisease,
   });
 
   Diagnosis.fromJson(Map<String, dynamic> json) {
@@ -21,7 +25,13 @@ class Diagnosis {
     bestDiseaseId = json['best_disease_id'] ?? "Tidak ada id penyakit";
     bestPercentageDisease = json['best_percentage_disease'] ?? "0.0";
     createdAt = json['created_at'];
-    nameDisease = json['disease']?['name_disease'] ?? "Tidak ada nama penyakit";
+    final disease = json['disease'];
+    nameDisease = disease != null
+        ? disease['name_disease'] ?? "Tidak ada nama penyakit"
+        : "Tidak ada nama penyakit";
+    imageDisease = disease != null && disease['image_disease'] != null
+        ? "${ApiUrl.storageUrl}${disease['image_disease']}"
+        : "https://cdn-icons-png.flaticon.com/512/1040/1040204.png";
   }
 
   Map<String, dynamic> toJson() {
@@ -32,6 +42,7 @@ class Diagnosis {
     data['best_percentage_disease'] = bestPercentageDisease;
     data['created_at'] = createdAt;
     data['name_disease'] = nameDisease;
+    data['image_disease'] = imageDisease;
     return data;
   }
 }
@@ -42,6 +53,7 @@ class ResultDiagnosis {
   String? diseaseId;
   String? percentage;
   String? nameDisease;
+  String? imageDisease;
 
   ResultDiagnosis({
     this.id,
@@ -49,6 +61,7 @@ class ResultDiagnosis {
     this.diseaseId,
     this.percentage,
     this.nameDisease,
+    this.imageDisease,
   });
 
   ResultDiagnosis.fromJson(Map<String, dynamic> json) {
@@ -57,5 +70,6 @@ class ResultDiagnosis {
     diseaseId = json['disease_id'];
     percentage = json['percentage'];
     nameDisease = json['disease']['name_disease'];
+    imageDisease = "${ApiUrl.storageUrl}" + json['disease']['image_disease'];
   }
 }

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/views/widget/disease_card.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
-import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -106,9 +105,7 @@ class _DiseasePageState extends State<DiseasePage> {
               Padding(
                 padding: EdgeInsets.all(16),
                 child: diseaseProvider.diseases.isEmpty
-                    ? Expanded(
-                        child: Center(
-                            child: nullState(nullTitle: "Belum ada data!")))
+                    ? SizedBox.shrink()
                     : Skeletonizer(
                         enabled: diseaseProvider.isLoading,
                         enableSwitchAnimation: true,
@@ -121,9 +118,7 @@ class _DiseasePageState extends State<DiseasePage> {
                                 children: [
                                   diseaseCard(
                                     title: disease.nameDisease!,
-                                    // image: disease.imageDisease!,
-                                    image:
-                                        "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
+                                    image: disease.imageDisease!,
                                     risk: disease.riskLevel!,
                                     description: disease.descriptionDisease!,
                                     onTap: () {

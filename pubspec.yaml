@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   another_flushbar: ^1.12.30
+  connectivity_plus: ^6.1.4
   dio: ^5.7.0
   flutter:
     sdk: flutter
@@ -28,6 +29,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/core/
+    - assets/others/
 
   fonts:
     - family: Inter

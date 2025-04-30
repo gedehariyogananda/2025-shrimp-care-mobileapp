@@ -104,9 +104,10 @@ class _LoginPageState extends State<LoginPage> {
                       isRequired: true),
                   const SizedBox(height: 20),
                   customFormInput(
-                      title: 'Password',
-                      hintText: "Masukkan password",
+                      title: 'Kata Sandi',
+                      hintText: "Masukkan kata sandi",
                       controller: passwordController,
+                      isPassword: true,
                       icon: Icons.lock,
                       isRequired: true),
                   const SizedBox(height: 10),

@@ -66,8 +66,8 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
                 child: Column(
                   children: [
                     Image.network(
-                      // detail.imageDisease!,
-                      "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
+                      detail.imageDisease!,
+                      // "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
                       fit: BoxFit.cover,
                       height: 200,
                       width: double.infinity,

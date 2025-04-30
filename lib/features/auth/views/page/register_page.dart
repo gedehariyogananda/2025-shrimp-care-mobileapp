@@ -160,6 +160,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   customFormInput(
                       title: 'Kata Sandi',
                       hintText: "Masukkan kata sandi",
+                      isPassword: true,
                       icon: Icons.lock,
                       controller: passwordController,
                       isRequired: true),
@@ -167,6 +168,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   customFormInput(
                       title: 'Konfirmasi Kata Sandi',
                       hintText: "Masukkan konfirmasi kata sandi",
+                      isPassword: true,
                       controller: confirmPasswordController,
                       icon: Icons.lock,
                       isRequired: true),

@@ -62,17 +62,22 @@ class DiagnosisProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      print("📡 Fetching diagnosis...");
       final diagnosis = await _diagnosisService.getHistoryDiagnosis(
         startDate: startDate,
         endDate: endDate,
         setLimit: setLimit,
       );
 
+      print("✅ Received diagnosis response");
+
       if (diagnosis.isNotEmpty) {
         _diagnosis = diagnosis;
       } else {
         _diagnosis = [];
       }
+
+      print("diagnosis $_diagnosis");
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -128,6 +133,8 @@ class DiagnosisProvider extends ChangeNotifier {
       } else {
         _allDiagnosis = [];
       }
+
+      print("all diagnosis $allDiagnosis");
 
       var length = allDiagnosis.length;
       _isLoading = false;

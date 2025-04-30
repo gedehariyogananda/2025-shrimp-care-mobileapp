@@ -1,3 +1,5 @@
+import 'package:shrimp_care_mobileapp/config/api_server.dart';
+
 class Disease {
   String? id;
   String? nameDisease;
@@ -10,7 +12,7 @@ class Disease {
   Disease.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     nameDisease = json['name_disease'];
-    imageDisease = json['image_disease'];
+    imageDisease = "${ApiUrl.storageUrl}" + json['image_disease'];
     riskLevel = json['risk_level'];
     descriptionDisease = json['definition_disease'] ?? "Tidak ada deskripsi";
   }

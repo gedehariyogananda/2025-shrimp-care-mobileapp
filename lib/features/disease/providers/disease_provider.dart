@@ -26,6 +26,11 @@ class DiseaseProvider extends ChangeNotifier {
     _search = '';
   }
 
+  void clearDiseases() {
+    _diseases = [];
+    notifyListeners();
+  }
+
   void setSearch(String search) {
     _search = search;
     fetchDiseaseAll();
@@ -69,6 +74,8 @@ class DiseaseProvider extends ChangeNotifier {
   }
 
   void fetchDiseaseHomePage() {
+    clearDiseases();
+
     fetchDiseases(
       setLimit: 2,
       withGteRiskLevel: true,
@@ -77,6 +84,7 @@ class DiseaseProvider extends ChangeNotifier {
   }
 
   void fetchDiseaseAll() {
+    clearDiseases();
     fetchDiseases(
       setLimit: 10000,
       prefixSort: prefixSort,
@@ -99,5 +107,10 @@ class DiseaseProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void clearSelectedDisease() {
+    _selectedDisease = DetailDisease();
+    notifyListeners();
   }
 }
