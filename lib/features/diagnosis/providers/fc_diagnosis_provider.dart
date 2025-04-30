@@ -80,7 +80,6 @@ class FcDiagnosisProvider extends ChangeNotifier {
       notifyListeners();
       return null;
     } catch (e) {
-      print("error: $e");
       _isLoading = false;
       notifyListeners();
       if (e is String) {

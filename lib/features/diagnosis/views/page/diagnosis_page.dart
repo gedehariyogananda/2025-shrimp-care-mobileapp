@@ -17,6 +17,7 @@ class DiagnosisPage extends StatefulWidget {
 }
 
 class _DiagnosisPageState extends State<DiagnosisPage> {
+  bool isCheckboxMode = false;
   bool isGejalaSelected = true;
 
   @override
@@ -203,42 +204,76 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
           ),
         ),
         const SizedBox(height: 15),
-        TextField(
-          onChanged: (value) {
-            fcDiagnosisProvider?.setSearchSymtomps(value);
-          },
-          decoration: InputDecoration(
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            filled: true,
-            fillColor: Colors.white,
-            hintText: "Cari gejala...",
-            prefixIcon: const Icon(Icons.search, color: Colors.grey),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Colors.grey.shade300),
+        Row(
+          children: [
+            // Input Search Field
+            Expanded(
+              child: TextField(
+                onChanged: (value) {
+                  fcDiagnosisProvider?.setSearchSymtomps(value);
+                },
+                decoration: InputDecoration(
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: "Cari gejala...",
+                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(color: MyColor.primary),
+                  ),
+                ),
+              ),
             ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Colors.grey.shade300),
+
+            const SizedBox(width: 8), // Jarak antara TextField dan IconButton
+
+            // Mode Toggle Button
+            Container(
+              height: 48,
+              width: 48,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: IconButton(
+                icon: Icon(
+                  Icons.checklist_rounded,
+                  color: isCheckboxMode ? MyColor.primary : Colors.grey.shade400,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isCheckboxMode = !isCheckboxMode;
+                  });
+                },
+              ),
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: MyColor.primary),
-            ),
-          ),
+          ],
         ),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
-            child: _symptompsGrid(
-              isLoading: fcDiagnosisProvider?.isLoading ?? false,
-              symptoms: fcDiagnosisProvider?.allSymptoms ?? [],
-              selectedSymptomCodes:
-                  fcDiagnosisProvider?.selectedSymptomCodes ?? [],
-              onSelect: (symptomCode) {
-                fcDiagnosisProvider?.toggleSymptomCode(symptomCode);
-              },
+            child: SingleChildScrollView(
+              child: _symptompsGrid(
+                isCheckboxMode: isCheckboxMode,
+                isLoading: fcDiagnosisProvider?.isLoading ?? false,
+                symptoms: fcDiagnosisProvider?.allSymptoms ?? [],
+                selectedSymptomCodes:
+                    fcDiagnosisProvider?.selectedSymptomCodes ?? [],
+                onSelect: (symptomCode) {
+                  fcDiagnosisProvider?.toggleSymptomCode(symptomCode);
+                },
+              ),
             ),
           ),
         ),
@@ -337,6 +372,7 @@ Widget _symptompsGrid({
   required List<Symptoms?> symptoms,
   required List<String> selectedSymptomCodes,
   required Function(String) onSelect,
+  required bool isCheckboxMode,
 }) {
   if (isLoading) {
     return Wrap(
@@ -361,38 +397,73 @@ Widget _symptompsGrid({
     );
   }
 
-  return SingleChildScrollView(
-    child: Wrap(
-      alignment: WrapAlignment.center,
-      spacing: 8.0,
-      runSpacing: 8.0,
+  if (isCheckboxMode) {
+    return Column(
       children: symptoms.map((symptom) {
-        final isSelected = selectedSymptomCodes.contains(symptom?.codeSymptoms);
-        return GestureDetector(
-          onTap: () => onSelect(symptom?.codeSymptoms ?? ""),
-          child: IntrinsicWidth(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-              decoration: BoxDecoration(
-                color: isSelected ? MyColor.primary : Colors.transparent,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: isSelected ? MyColor.primary : Colors.grey.shade300,
-                  width: 1.5,
-                ),
-              ),
-              child: Text(
-                symptom?.nameSymptoms ?? "",
-                style: MyTextStyle.text14.copyWith(
-                  color: isSelected ? Colors.white : Colors.black,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                ),
-                textAlign: TextAlign.center,
-              ),
+        final isSelected =
+            selectedSymptomCodes.contains(symptom?.codeSymptoms ?? "");
+
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected ? MyColor.primary : Colors.grey.shade300,
+              width: 1.5,
             ),
+          ),
+          child: CheckboxListTile(
+            title: Text(
+              symptom?.nameSymptoms ?? "",
+              style: const TextStyle(fontSize: 14), // kecilin teks
+            ),
+            value: isSelected,
+            onChanged: (_) => onSelect(symptom?.codeSymptoms ?? ""),
+            activeColor: MyColor.primary,
+            controlAffinity: ListTileControlAffinity.leading,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+            dense: true, // PERKECIL TINGGI default
+            visualDensity: const VisualDensity(
+                horizontal: 0, vertical: -4), // PERKECIL HEIGHT
           ),
         );
       }).toList(),
-    ),
+    );
+  }
+
+  // Default (Circle Button Mode)
+  return Wrap(
+    alignment: WrapAlignment.center,
+    spacing: 8.0,
+    runSpacing: 8.0,
+    children: symptoms.map((symptom) {
+      final isSelected =
+          selectedSymptomCodes.contains(symptom?.codeSymptoms ?? "");
+
+      return GestureDetector(
+        onTap: () => onSelect(symptom?.codeSymptoms ?? ""),
+        child: IntrinsicWidth(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+            decoration: BoxDecoration(
+              color: isSelected ? MyColor.primary : Colors.transparent,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isSelected ? MyColor.primary : Colors.grey.shade300,
+                width: 1.5,
+              ),
+            ),
+            child: Text(
+              symptom?.nameSymptoms ?? "",
+              style: MyTextStyle.text14.copyWith(
+                color: isSelected ? Colors.white : Colors.black,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      );
+    }).toList(),
   );
 }

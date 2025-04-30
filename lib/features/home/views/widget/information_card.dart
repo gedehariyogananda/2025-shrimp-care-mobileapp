@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -124,12 +126,17 @@ Widget informationCard({
                     style: MyTextStyle.text12,
                   ),
                 ),
-                Image.asset(
-                  'assets/images/core/icon_shrimp_care.png',
+                SvgPicture.asset(
+                  "assets/images/core/icon_shrimp.svg",
                   width: 80,
                   height: 70,
                   fit: BoxFit.cover,
-                ),
+                )
+                // Image.asset(
+                //   width: 80,
+                //   height: 70,
+                //   fit: BoxFit.cover,
+                // ),
               ],
             ),
           ],

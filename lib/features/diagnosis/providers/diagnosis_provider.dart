@@ -134,8 +134,6 @@ class DiagnosisProvider extends ChangeNotifier {
         _allDiagnosis = [];
       }
 
-      print("all diagnosis $allDiagnosis");
-
       var length = allDiagnosis.length;
       _isLoading = false;
       notifyListeners();
