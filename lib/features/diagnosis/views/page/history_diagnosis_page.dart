@@ -152,8 +152,6 @@ class _HistoryDiagnosisPageState extends State<HistoryDiagnosisPage> {
                                     child: diagnosisCard(
                                       title: disease.nameDisease!,
                                       image: disease.imageDisease!,
-                                      // image:
-                                      //     "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
                                       accuracy: double.parse(
                                           disease.bestPercentageDisease!),
                                       date: disease.createdAt!,

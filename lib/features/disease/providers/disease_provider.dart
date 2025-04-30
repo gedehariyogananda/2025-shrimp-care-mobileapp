@@ -101,7 +101,7 @@ class DiseaseProvider extends ChangeNotifier {
       _selectedDisease = disease;
       _isLoading = false;
       notifyListeners();
-    } catch (e) {
+    } catch (e) {  
       return null;
     } finally {
       _isLoading = false;

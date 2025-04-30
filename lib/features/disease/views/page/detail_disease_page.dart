@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
+import 'package:shrimp_care_mobileapp/features/disease/views/loader/detail_disease_loader.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/disease.dart';
 import 'package:shrimp_care_mobileapp/utils/null_state.dart';
@@ -44,87 +45,84 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
       body: Consumer<DiseaseProvider>(
           builder: (context, detailDiseaseProvider, child) {
         final detail = detailDiseaseProvider.selectedDisease;
-        if (detail.riskLevel == null) {
-          return SizedBox();
-        }
 
-        final riskDetails = MyDisease.getRiskDetails(detail.riskLevel!);
+        if (detailDiseaseProvider.isLoading) {
+          return detailDiseaseLoader(
+              isLoading: detailDiseaseProvider.isLoading);
+        }
 
         if (detailDiseaseProvider.diseases.isEmpty) {
           return nullState(nullTitle: "Data tidak ditemukan");
         }
 
-        return Skeletonizer(
-          enableSwitchAnimation: true,
-          enabled: detailDiseaseProvider.isLoading,
-          child: Column(
-            children: [
-              Container(
-                height: 288,
-                color: Colors.white,
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    Image.network(
-                      detail.imageDisease!,
-                      // "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
-                      fit: BoxFit.cover,
-                      height: 200,
-                      width: double.infinity,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            detail.nameDisease!,
-                            style: MyTextStyle.text18.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+        final riskDetails = MyDisease.getRiskDetails(detail.riskLevel ?? 0);
+
+        return Column(
+          children: [
+            Container(
+              height: 288,
+              color: Colors.white,
+              width: double.infinity,
+              child: Column(
+                children: [
+                  Image.network(
+                    detail.imageDisease ?? "-",
+                    fit: BoxFit.cover,
+                    height: 200,
+                    width: double.infinity,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          detail.nameDisease ?? "-",
+                          style: MyTextStyle.text18.copyWith(
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Icons.warning,
-                                  color: riskDetails.riskColor, size: 18),
-                              const SizedBox(width: 6),
-                              Text(
-                                'Risiko ${riskDetails.riskText}',
-                                style: MyTextStyle.text14.copyWith(
-                                  color: riskDetails.riskColor,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(Icons.warning,
+                                color: riskDetails.riskColor, size: 18),
+                            const SizedBox(width: 6),
+                            Text(
+                              'Risiko ${riskDetails.riskText}',
+                              style: MyTextStyle.text14.copyWith(
+                                color: riskDetails.riskColor,
+                                fontWeight: FontWeight.w500,
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              _buildCustomTabBar(),
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    _tabInformasi(
-                      definition: detail.definitionDisease!,
-                      symptoms: detail.symtomsDisease!,
-                      causes: detail.causesDisease!,
-                      moreInfo: detail.moreInformation!,
-                    ),
-                    _tabPencegahan(
-                      prevention: detail.preventionDisease!,
-                      recommendation: detail.recomendationDisease!,
-                    ),
-                  ],
-                ),
+            ),
+            const SizedBox(height: 16),
+            _buildCustomTabBar(),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _tabInformasi(
+                    definition: detail.definitionDisease,
+                    symptoms: detail.symtomsDisease,
+                    causes: detail.causesDisease,
+                    moreInfo: detail.moreInformation,
+                  ),
+                  _tabPencegahan(
+                    prevention: detail.preventionDisease,
+                    recommendation: detail.recomendationDisease,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         );
       }),
     );
@@ -226,10 +224,10 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
   }
 
   Widget _tabInformasi({
-    String? definition,
-    String? symptoms,
-    String? causes,
-    String? moreInfo,
+    String? definition = "-",
+    String? symptoms = "-",
+    String? causes = "-",
+    String? moreInfo = "-",
   }) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -250,8 +248,8 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
   }
 
   Widget _tabPencegahan({
-    String? prevention,
-    String? recommendation,
+    String? prevention = "-",
+    String? recommendation = "-",
   }) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),

@@ -22,12 +22,13 @@ class DetailDisease {
     this.moreInformation,
     this.preventionDisease,
     this.recomendationDisease,
+    this.riskLevel,
   });
 
   DetailDisease.fromJson(Map<String, dynamic> json) {
     id = json['id'] ?? '';
     nameDisease = json['name_disease'];
-    imageDisease = "${ApiUrl.storageUrl}" + json['image_disease'];
+    imageDisease = "${ApiUrl.storageUrl}${json['image_disease']}";
     riskLevel = json['resk_level'];
     definitionDisease =
         json['information']['definition_disease'] ?? "Tidak ada definisi";
@@ -44,7 +45,7 @@ class DetailDisease {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name_disease'] = nameDisease;
     data['risk_level'] = riskLevel;

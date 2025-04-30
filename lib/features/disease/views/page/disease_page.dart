@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
+import 'package:shrimp_care_mobileapp/features/disease/views/loader/disease_loader.dart';
 import 'package:shrimp_care_mobileapp/features/disease/views/widget/disease_card.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
+import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -104,38 +106,40 @@ class _DiseasePageState extends State<DiseasePage> {
               ),
               Padding(
                 padding: EdgeInsets.all(16),
-                child: diseaseProvider.diseases.isEmpty
-                    ? SizedBox.shrink()
-                    : Skeletonizer(
-                        enabled: diseaseProvider.isLoading,
-                        enableSwitchAnimation: true,
-                        child: Column(
-                          children: List.generate(
-                            diseaseProvider.diseases.length,
-                            (index) {
-                              final disease = diseaseProvider.diseases[index];
-                              return Column(
-                                children: [
-                                  diseaseCard(
-                                    title: disease.nameDisease!,
-                                    image: disease.imageDisease!,
-                                    risk: disease.riskLevel!,
-                                    description: disease.descriptionDisease!,
-                                    onTap: () {
-                                      context.pushNamed(
-                                        'detail_disease',
-                                        pathParameters: {
-                                          'id': disease.id!,
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                      ),
+                child: diseaseProvider.isLoading
+                    ? diseaseLoader(isLoading: diseaseProvider.isLoading)
+                    : (diseaseProvider.diseases.isEmpty
+                        ? Padding(
+                            padding: EdgeInsets.only(top: 70),
+                            child: nullState(
+                                nullTitle: "Data penyakit tidak ditemukan!"),
+                          )
+                        : Column(
+                            children: List.generate(
+                              diseaseProvider.diseases.length,
+                              (index) {
+                                final disease = diseaseProvider.diseases[index];
+                                return Column(
+                                  children: [
+                                    diseaseCard(
+                                      title: disease.nameDisease!,
+                                      image: disease.imageDisease!,
+                                      risk: disease.riskLevel!,
+                                      description: disease.descriptionDisease!,
+                                      onTap: () {
+                                        context.pushNamed(
+                                          'detail_disease',
+                                          pathParameters: {
+                                            'id': disease.id!,
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          )),
               ),
             ],
           ),
