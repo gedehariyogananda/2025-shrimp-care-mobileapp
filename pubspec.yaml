@@ -31,7 +31,6 @@ flutter:
     - assets/images/core/
     - assets/others/
     - assets/
-    - assets/images/core/icon_shrimp.svg
 
   fonts:
     - family: Inter

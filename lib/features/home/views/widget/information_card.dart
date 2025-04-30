@@ -16,7 +16,7 @@ Widget informationCardSlider() {
   final List<Map<String, dynamic>> cards = [
     {
       "icon": Icons.sports_cricket_outlined,
-      "title": "Cek Kondisi Udang Anda",
+      "title": "Cek Udang Anda",
       "description":
           "Klik disini untuk bisa memulai diagnosa penyakit udang vanname anda!",
     },
@@ -32,7 +32,7 @@ Widget informationCardSlider() {
       return Column(
         children: [
           SizedBox(
-            height: 115,
+            height: 117,
             child: PageView.builder(
               controller: pageController,
               itemCount: cards.length,
@@ -93,54 +93,59 @@ Widget informationCard({
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      height: 115,
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: MyColor.softSecondary,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 11),
-        child: Column(
-          children: [
-            Row(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(icon, color: MyColor.primary, size: 20),
-                const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: MyTextStyle.text16.copyWith(
-                    color: MyColor.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                )
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Text(
-                    description,
-                    style: MyTextStyle.text12,
-                  ),
+                Row(
+                  children: [
+                    Icon(icon, color: MyColor.primary, size: 24),
+                    const SizedBox(width: 8),
+                    Text(
+                      title,
+                      style: MyTextStyle.text16.copyWith(
+                        color: MyColor.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
-                SvgPicture.asset(
-                  "assets/images/core/icon_shrimp.svg",
-                  width: 80,
-                  height: 70,
-                  fit: BoxFit.cover,
-                )
-                // Image.asset(
-                //   width: 80,
-                //   height: 70,
-                //   fit: BoxFit.cover,
-                // ),
+                const SizedBox(height: 6),
+                Text(
+                  description,
+                  style: MyTextStyle.text12.copyWith(
+                    color: Colors.black87,
+                  ),
+                  maxLines: null,
+                  overflow: TextOverflow.visible,
+                ),
               ],
             ),
-          ],
-        ),
+          ),
+          SvgPicture.asset(
+            "assets/images/core/icon_shrimp.svg",
+            width: 70,
+            height: 75,
+          ),
+        ],
       ),
     ),
   );
