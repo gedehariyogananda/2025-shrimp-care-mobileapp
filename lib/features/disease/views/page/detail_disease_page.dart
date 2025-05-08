@@ -113,7 +113,7 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
                     definition: detail.definitionDisease,
                     symptoms: detail.symtomsDisease,
                     causes: detail.causesDisease,
-                    moreInfo: detail.moreInformation,
+                    moreInfo: _formatMoreInfo(detail.moreInformation),
                   ),
                   _tabPencegahan(
                     prevention: detail.preventionDisease,
@@ -126,6 +126,15 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
         );
       }),
     );
+  }
+
+  String _formatMoreInfo(String? info) {
+    if (info == null || info.trim().isEmpty) {
+      return "No additional information.";
+    }
+    List<String> items =
+        info.replaceAll(r'\n', '\n').split('\n').map((e) => e.trim()).toList();
+    return items.map((item) => '• $item').join('\n');
   }
 
   Widget _buildCustomTabBar() {
