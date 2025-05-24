@@ -111,7 +111,7 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
                 children: [
                   _tabInformasi(
                     definition: detail.definitionDisease,
-                    symptoms: detail.symtomsDisease,
+                    symptoms: _formatMoreInfo(detail.symtomsDisease),
                     causes: detail.causesDisease,
                     moreInfo: _formatMoreInfo(detail.moreInformation),
                   ),

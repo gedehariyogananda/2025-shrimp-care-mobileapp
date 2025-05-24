@@ -249,7 +249,8 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
               child: IconButton(
                 icon: Icon(
                   Icons.checklist_rounded,
-                  color: isCheckboxMode ? MyColor.primary : Colors.grey.shade400,
+                  color:
+                      isCheckboxMode ? MyColor.primary : Colors.grey.shade400,
                 ),
                 onPressed: () {
                   setState(() {
@@ -311,10 +312,17 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
           children: [
             GestureDetector(
               onTap: () {
-                if ((fcDiagnosisProvider?.threshold ?? 0) > 0) {
-                  fcDiagnosisProvider?.setThreshold(
-                      (fcDiagnosisProvider?.threshold ?? 0) - 10);
+                final currentThreshold = fcDiagnosisProvider?.threshold ?? 0;
+
+                if (currentThreshold <= 65) {
+                  AlertSnackbar.showErrorSnackbar(
+                    context,
+                    "Tingkat keyakinan tidak boleh kurang dari 65%",
+                  );
+                  return;
                 }
+
+                fcDiagnosisProvider?.setThreshold(currentThreshold - 5);
               },
               child: Container(
                 padding: const EdgeInsets.all(8),
@@ -337,8 +345,8 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
             GestureDetector(
               onTap: () {
                 if ((fcDiagnosisProvider?.threshold ?? 0) < 100) {
-                  fcDiagnosisProvider?.setThreshold(
-                      (fcDiagnosisProvider?.threshold ?? 0) + 10);
+                  fcDiagnosisProvider
+                      ?.setThreshold((fcDiagnosisProvider?.threshold ?? 0) + 5);
                 }
               },
               child: Container(

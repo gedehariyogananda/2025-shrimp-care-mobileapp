@@ -14,7 +14,7 @@ class FcDiagnosisProvider extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  int _threshold = 60;
+  int _threshold = 65;
   List<String> _selectedSymptomCodes = [];
 
   int get threshold => _threshold;
