@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
-import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
-import 'package:shrimp_care_mobileapp/features/disease/views/loader/detail_disease_loader.dart';
+import 'package:shrimp_care_mobileapp/features/disease/providers/diseases_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/disease.dart';
-import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class DetailDiseasePage extends StatefulWidget {
   final String id;
@@ -26,8 +23,7 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<DiseaseProvider>(context, listen: false)
-          .fetchDiseasesById(widget.id);
+      Provider.of<DiseasesProvider>(context, listen: false).getById(widget.id);
     });
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
@@ -37,94 +33,82 @@ class _DetailDiseasePageState extends State<DetailDiseasePage>
 
   @override
   Widget build(BuildContext context) {
+    final detailDiseaseProvider = Provider.of<DiseasesProvider>(context);
+    final detail = detailDiseaseProvider.detailDisease;
+    final riskDetails = MyDisease.getRiskDetails(detail.riskLevel ?? 0);
+
     return Scaffold(
       backgroundColor: MyColor.themeColor,
       appBar: CustomAppBar(
         title: "Detail Penyakit",
       ),
-      body: Consumer<DiseaseProvider>(
-          builder: (context, detailDiseaseProvider, child) {
-        final detail = detailDiseaseProvider.selectedDisease;
-
-        if (detailDiseaseProvider.isLoading) {
-          return detailDiseaseLoader(
-              isLoading: detailDiseaseProvider.isLoading);
-        }
-
-        if (detailDiseaseProvider.diseases.isEmpty) {
-          return nullState(nullTitle: "Data tidak ditemukan");
-        }
-
-        final riskDetails = MyDisease.getRiskDetails(detail.riskLevel ?? 0);
-
-        return Column(
-          children: [
-            Container(
-              height: 288,
-              color: Colors.white,
-              width: double.infinity,
-              child: Column(
-                children: [
-                  Image.network(
-                    detail.imageDisease ?? "-",
-                    fit: BoxFit.cover,
-                    height: 200,
-                    width: double.infinity,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          detail.nameDisease ?? "-",
-                          style: MyTextStyle.text18.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+      body: Column(
+        children: [
+          Container(
+            height: 288,
+            color: Colors.white,
+            width: double.infinity,
+            child: Column(
+              children: [
+                Image.asset(
+                  detail.imageDisease ?? "-",
+                  fit: BoxFit.cover,
+                  height: 200,
+                  width: double.infinity,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        detail.nameDisease ?? "-",
+                        style: MyTextStyle.text18.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(Icons.warning,
-                                color: riskDetails.riskColor, size: 18),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Risiko ${riskDetails.riskText}',
-                              style: MyTextStyle.text14.copyWith(
-                                color: riskDetails.riskColor,
-                                fontWeight: FontWeight.w500,
-                              ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Icon(Icons.warning,
+                              color: riskDetails.riskColor, size: 18),
+                          const SizedBox(width: 6),
+                          Text(
+                            'Risiko ${riskDetails.riskText}',
+                            style: MyTextStyle.text14.copyWith(
+                              color: riskDetails.riskColor,
+                              fontWeight: FontWeight.w500,
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            _buildCustomTabBar(),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _tabInformasi(
-                    definition: detail.definitionDisease,
-                    symptoms: _formatMoreInfo(detail.symtomsDisease),
-                    causes: detail.causesDisease,
-                    moreInfo: _formatMoreInfo(detail.moreInformation),
-                  ),
-                  _tabPencegahan(
-                    prevention: detail.preventionDisease,
-                    recommendation: detail.recomendationDisease,
-                  ),
-                ],
-              ),
+          ),
+          const SizedBox(height: 16),
+          _buildCustomTabBar(),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _tabInformasi(
+                  definition: detail.definitionDisease,
+                  symptoms: _formatMoreInfo(detail.symtomsDisease),
+                  causes: detail.causesDisease,
+                  moreInfo: _formatMoreInfo(detail.moreInformation),
+                ),
+                _tabPencegahan(
+                  prevention: detail.preventionDisease,
+                  recommendation: detail.recomendationDisease,
+                ),
+              ],
             ),
-          ],
-        );
-      }),
+          ),
+        ],
+      ),
     );
   }
 

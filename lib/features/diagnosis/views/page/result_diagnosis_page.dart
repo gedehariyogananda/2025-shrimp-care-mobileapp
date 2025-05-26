@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosis_provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
+import 'package:shrimp_care_mobileapp/features/disease/providers/diseases_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
+import 'package:shrimp_care_mobileapp/utils/disease_helper.dart';
 import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
@@ -12,7 +15,7 @@ import 'package:shrimp_care_mobileapp/features/diagnosis/views/widget/diagnosis_
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ResultDiagnosisPage extends StatefulWidget {
-  final String id;
+  final int id;
 
   const ResultDiagnosisPage({super.key, required this.id});
 
@@ -25,9 +28,7 @@ class _ResultDiagnosisPageState extends State<ResultDiagnosisPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      context.read<DiagnosisProvider>().fetchResultDiagnosis(
-            diagnosisId: widget.id,
-          );
+      context.read<DiagnosaProvider>().fetchDiagnoses(diagnosisId: widget.id);
     });
   }
 
@@ -38,8 +39,8 @@ class _ResultDiagnosisPageState extends State<ResultDiagnosisPage> {
         leading: true,
         onLeadingPressed: () {
           Future.microtask(() {
-            Provider.of<DiseaseProvider>(context, listen: false)
-                .fetchDiseaseHomePage();
+            Provider.of<DiseasesProvider>(context, listen: false)
+                .getHighRiskDisease();
             Provider.of<DiagnosisProvider>(context, listen: false)
                 .fetchDiagnosis(
               setLimit: 2,
@@ -68,7 +69,7 @@ class _ResultDiagnosisPageState extends State<ResultDiagnosisPage> {
             SizedBox(height: 20),
             Expanded(
               child: SingleChildScrollView(
-                child: Consumer<DiagnosisProvider>(
+                child: Consumer<DiagnosaProvider>(
                   builder: (context, diagnosisProvider, child) =>
                       diagnosisProvider.isLoading
                           ? Column(
@@ -88,29 +89,32 @@ class _ResultDiagnosisPageState extends State<ResultDiagnosisPage> {
                                 );
                               }),
                             )
-                          : (diagnosisProvider.resultDiagnosis.isEmpty
+                          : (diagnosisProvider.diagnoses.isEmpty
                               ? nullState(nullTitle: "Belum ada data!")
                               : Column(
                                   children: List.generate(
-                                    diagnosisProvider.resultDiagnosis.length,
+                                    diagnosisProvider.diagnoses.length,
                                     (index) {
-                                      final resultDiagnosis = diagnosisProvider
-                                          .resultDiagnosis[index];
+                                      final diagnoses =
+                                          diagnosisProvider.diagnoses[index];
+
+                                      final diseaseInfo =
+                                          getDiseaseById(diagnoses.diseaseId);
                                       return Column(
                                         children: [
                                           diagnosisCard(
-                                            title: resultDiagnosis.nameDisease!,
-                                            image: resultDiagnosis.imageDisease!,
+                                            title:
+                                                diseaseInfo?.nameDisease ?? '',
+                                            image:
+                                                diseaseInfo?.imageDisease ?? '',
                                             // image:
                                             //     "https://cdn-icons-png.flaticon.com/512/1040/1040204.png",
-                                            accuracy: double.parse(
-                                                resultDiagnosis.percentage!),
+                                            accuracy: diagnoses.percentage,
                                             onTap: () {
                                               context.pushNamed(
                                                 'detail_disease',
                                                 pathParameters: {
-                                                  'id': resultDiagnosis
-                                                      .diseaseId!,
+                                                  'id': diagnoses.diseaseId,
                                                 },
                                               );
                                             },

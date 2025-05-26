@@ -2,24 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
+import 'package:shrimp_care_mobileapp/config/database.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/login_provider.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/register_provider.dart';
 import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosis_provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/providers/fc_diagnosis_provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
+import 'package:shrimp_care_mobileapp/features/disease/providers/diseases_provider.dart';
 import 'package:shrimp_care_mobileapp/features/home/providers/greeting_provider.dart';
+import 'package:shrimp_care_mobileapp/features/repositories/diagnosis_detail_repository.dart';
+import 'package:shrimp_care_mobileapp/features/repositories/diagnosis_repository.dart';
+import 'package:shrimp_care_mobileapp/services/diagnosis_service.dart';
 import 'package:shrimp_care_mobileapp/start/routes.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting(AppConstants.initializedLang, null);
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
+
+  final db = AppDatabase();
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +53,15 @@ class MainApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => FcDiagnosisProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DiseasesProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DiagnosaProvider(DiagnosisServices(
+            DiagnosisRepository(db),
+            DiagnosisDetailRepository(db),
+          )),
         ),
       ],
       child: MaterialApp.router(

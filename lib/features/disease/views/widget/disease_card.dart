@@ -38,7 +38,7 @@ Widget diseaseCard({
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                       )
-                    : Image.network(
+                    : Image.asset(
                         image,
                         width: 78,
                         height: 88,

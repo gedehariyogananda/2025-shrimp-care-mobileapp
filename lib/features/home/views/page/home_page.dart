@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosis_provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
+import 'package:shrimp_care_mobileapp/features/disease/providers/diseases_provider.dart';
 import 'package:shrimp_care_mobileapp/features/home/providers/greeting_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/null_state.dart';
@@ -28,8 +30,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<DiseaseProvider>(context, listen: false)
-          .fetchDiseaseHomePage();
+      Provider.of<DiseasesProvider>(context, listen: false)
+          .getHighRiskDisease();
       Provider.of<DiagnosisProvider>(context, listen: false).fetchDiagnosis(
         setLimit: 2,
         startDate: null,
@@ -39,6 +41,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget build(BuildContext context) {
+    final diseaseProvider = Provider.of<DiseasesProvider>(context);
+    final disease = diseaseProvider.highRiskDisease;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(
@@ -204,72 +209,34 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         height: 5,
                       ),
-                      Consumer<DiseaseProvider>(
-                        builder: (context, diseaseProvider, child) =>
-                            diseaseProvider.isLoading
-                                ? Column(
-                                    children: List.generate(2, (index) {
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 12),
-                                        child: Skeletonizer(
-                                          enableSwitchAnimation: true,
-                                          enabled: diseaseProvider.isLoading,
-                                          child: diseaseCard(
-                                            image: "-",
-                                            title: "---------------",
-                                            description: "--------------",
-                                            risk: 0,
-                                            onTap: () {},
-                                          ),
-                                        ),
-                                      );
-                                    }),
-                                  )
-                                : (diseaseProvider.diseases.isEmpty)
-                                    ? nullState(nullTitle: "Belum ada data!")
-                                    : Skeletonizer(
-                                        enableSwitchAnimation: true,
-                                        enabled: diseaseProvider.isLoading,
-                                        child: Column(
-                                          children: List.generate(
-                                            diseaseProvider.diseases.length,
-                                            (index) {
-                                              final disease = diseaseProvider
-                                                  .diseases[index];
-                                              return Column(
-                                                children: [
-                                                  diseaseCard(
-                                                    title: disease.nameDisease!,
-                                                    image:
-                                                        disease.imageDisease!,
-                                                    // image:
-                                                    //     "https://strapi.jala.tech/uploads/contoh_udang_yang_terkena_penyakit_black_spot_disease_41098d2b90.jpg",
-                                                    risk: disease.riskLevel!,
-                                                    description: disease
-                                                        .descriptionDisease!,
-                                                    onTap: () {
-                                                      if (disease.id != null) {
-                                                        context.pushNamed(
-                                                          'detail_disease',
-                                                          pathParameters: {
-                                                            'id': disease.id!,
-                                                          },
-                                                        ).then((_) => {
-                                                              context
-                                                                  .read<
-                                                                      DiseaseProvider>()
-                                                                  .clearSelectedDisease(),
-                                                            });
-                                                      }
-                                                    },
-                                                  ),
-                                                ],
-                                              );
+                      Column(
+                        children: disease.isEmpty
+                            ? [nullState(nullTitle: "Belum ada data!")]
+                            : List.generate(
+                                2,
+                                (index) {
+                                  final data = disease[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: diseaseCard(
+                                      title: data.nameDisease!,
+                                      image: data.imageDisease!,
+                                      risk: data.riskLevel!,
+                                      description: data.definitionDisease!,
+                                      onTap: () {
+                                        if (data.id != null) {
+                                          context.pushNamed(
+                                            'detail_disease',
+                                            pathParameters: {
+                                              'id': data.id!,
                                             },
-                                          ),
-                                        ),
-                                      ),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
                       ),
                       const SizedBox(
                         height: 10,
