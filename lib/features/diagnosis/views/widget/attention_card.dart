@@ -15,7 +15,7 @@ Widget attentionCard({
       borderRadius: BorderRadius.circular(8),
     ),
     child: Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(
           icon,

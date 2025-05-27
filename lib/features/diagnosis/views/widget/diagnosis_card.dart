@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shrimp_care_mobileapp/utils/disease.dart';
+import 'package:shrimp_care_mobileapp/utils/format_helper.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 
 Widget diagnosisCard({
   required String image,
   required String title,
   required double accuracy,
-  String? date,
+  DateTime? date,
   required VoidCallback onTap,
 }) {
   return GestureDetector(
@@ -47,7 +48,7 @@ Widget diagnosisCard({
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                       )
-                    : Image.network(
+                    : Image.asset(
                         image,
                         width: 78,
                         height: 88,
@@ -102,7 +103,7 @@ Widget diagnosisCard({
                         ),
                         const SizedBox(width: 4.0),
                         Text(
-                          "Akurasi $accuracy / 100%",
+                          "Akurasi ${formatPercentage(accuracy)} / 100%",
                           style: MyTextStyle.text12.copyWith(
                             color: Colors.grey,
                             fontWeight: FontWeight.bold,
@@ -121,7 +122,7 @@ Widget diagnosisCard({
                           ),
                           const SizedBox(width: 4.0),
                           Text(
-                            date,
+                            formatDateTime(date),
                             style: MyTextStyle.text12.copyWith(
                               color: Colors.grey,
                               fontWeight: FontWeight.bold,

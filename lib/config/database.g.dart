@@ -650,22 +650,106 @@ typedef $$DiagnosisTableUpdateCompanionBuilder = DiagnosisCompanion Function({
   Value<DateTime> createdAt,
 });
 
+class $$DiagnosisTableFilterComposer
+    extends Composer<_$AppDatabase, $DiagnosisTable> {
+  $$DiagnosisTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get diseaseId => $composableBuilder(
+      column: $table.diseaseId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get percentage => $composableBuilder(
+      column: $table.percentage, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get explain => $composableBuilder(
+      column: $table.explain, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$DiagnosisTableOrderingComposer
+    extends Composer<_$AppDatabase, $DiagnosisTable> {
+  $$DiagnosisTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get diseaseId => $composableBuilder(
+      column: $table.diseaseId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get percentage => $composableBuilder(
+      column: $table.percentage, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get explain => $composableBuilder(
+      column: $table.explain, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$DiagnosisTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DiagnosisTable> {
+  $$DiagnosisTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get diseaseId =>
+      $composableBuilder(column: $table.diseaseId, builder: (column) => column);
+
+  GeneratedColumn<double> get percentage => $composableBuilder(
+      column: $table.percentage, builder: (column) => column);
+
+  GeneratedColumn<String> get explain =>
+      $composableBuilder(column: $table.explain, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
 class $$DiagnosisTableTableManager extends RootTableManager<
     _$AppDatabase,
     $DiagnosisTable,
     DiagnosisEntity,
     $$DiagnosisTableFilterComposer,
     $$DiagnosisTableOrderingComposer,
+    $$DiagnosisTableAnnotationComposer,
     $$DiagnosisTableCreateCompanionBuilder,
-    $$DiagnosisTableUpdateCompanionBuilder> {
+    $$DiagnosisTableUpdateCompanionBuilder,
+    (
+      DiagnosisEntity,
+      BaseReferences<_$AppDatabase, $DiagnosisTable, DiagnosisEntity>
+    ),
+    DiagnosisEntity,
+    PrefetchHooks Function()> {
   $$DiagnosisTableTableManager(_$AppDatabase db, $DiagnosisTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$DiagnosisTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$DiagnosisTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$DiagnosisTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DiagnosisTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DiagnosisTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> diseaseId = const Value.absent(),
@@ -694,67 +778,28 @@ class $$DiagnosisTableTableManager extends RootTableManager<
             explain: explain,
             createdAt: createdAt,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$DiagnosisTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $DiagnosisTable> {
-  $$DiagnosisTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get diseaseId => $state.composableBuilder(
-      column: $state.table.diseaseId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<double> get percentage => $state.composableBuilder(
-      column: $state.table.percentage,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get explain => $state.composableBuilder(
-      column: $state.table.explain,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-}
-
-class $$DiagnosisTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $DiagnosisTable> {
-  $$DiagnosisTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get diseaseId => $state.composableBuilder(
-      column: $state.table.diseaseId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<double> get percentage => $state.composableBuilder(
-      column: $state.table.percentage,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get explain => $state.composableBuilder(
-      column: $state.table.explain,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
+typedef $$DiagnosisTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $DiagnosisTable,
+    DiagnosisEntity,
+    $$DiagnosisTableFilterComposer,
+    $$DiagnosisTableOrderingComposer,
+    $$DiagnosisTableAnnotationComposer,
+    $$DiagnosisTableCreateCompanionBuilder,
+    $$DiagnosisTableUpdateCompanionBuilder,
+    (
+      DiagnosisEntity,
+      BaseReferences<_$AppDatabase, $DiagnosisTable, DiagnosisEntity>
+    ),
+    DiagnosisEntity,
+    PrefetchHooks Function()>;
 typedef $$DetailDiagnosisTableCreateCompanionBuilder = DetailDiagnosisCompanion
     Function({
   Value<int> id,
@@ -772,23 +817,108 @@ typedef $$DetailDiagnosisTableUpdateCompanionBuilder = DetailDiagnosisCompanion
   Value<DateTime> createdAt,
 });
 
+class $$DetailDiagnosisTableFilterComposer
+    extends Composer<_$AppDatabase, $DetailDiagnosisTable> {
+  $$DetailDiagnosisTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get diagnosisId => $composableBuilder(
+      column: $table.diagnosisId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get diseaseId => $composableBuilder(
+      column: $table.diseaseId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get percentage => $composableBuilder(
+      column: $table.percentage, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$DetailDiagnosisTableOrderingComposer
+    extends Composer<_$AppDatabase, $DetailDiagnosisTable> {
+  $$DetailDiagnosisTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get diagnosisId => $composableBuilder(
+      column: $table.diagnosisId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get diseaseId => $composableBuilder(
+      column: $table.diseaseId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get percentage => $composableBuilder(
+      column: $table.percentage, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$DetailDiagnosisTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DetailDiagnosisTable> {
+  $$DetailDiagnosisTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get diagnosisId => $composableBuilder(
+      column: $table.diagnosisId, builder: (column) => column);
+
+  GeneratedColumn<String> get diseaseId =>
+      $composableBuilder(column: $table.diseaseId, builder: (column) => column);
+
+  GeneratedColumn<double> get percentage => $composableBuilder(
+      column: $table.percentage, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
 class $$DetailDiagnosisTableTableManager extends RootTableManager<
     _$AppDatabase,
     $DetailDiagnosisTable,
     DetailDiagnosisEntity,
     $$DetailDiagnosisTableFilterComposer,
     $$DetailDiagnosisTableOrderingComposer,
+    $$DetailDiagnosisTableAnnotationComposer,
     $$DetailDiagnosisTableCreateCompanionBuilder,
-    $$DetailDiagnosisTableUpdateCompanionBuilder> {
+    $$DetailDiagnosisTableUpdateCompanionBuilder,
+    (
+      DetailDiagnosisEntity,
+      BaseReferences<_$AppDatabase, $DetailDiagnosisTable,
+          DetailDiagnosisEntity>
+    ),
+    DetailDiagnosisEntity,
+    PrefetchHooks Function()> {
   $$DetailDiagnosisTableTableManager(
       _$AppDatabase db, $DetailDiagnosisTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$DetailDiagnosisTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$DetailDiagnosisTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$DetailDiagnosisTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DetailDiagnosisTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DetailDiagnosisTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<int> diagnosisId = const Value.absent(),
@@ -817,66 +947,29 @@ class $$DetailDiagnosisTableTableManager extends RootTableManager<
             percentage: percentage,
             createdAt: createdAt,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$DetailDiagnosisTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $DetailDiagnosisTable> {
-  $$DetailDiagnosisTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<int> get diagnosisId => $state.composableBuilder(
-      column: $state.table.diagnosisId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get diseaseId => $state.composableBuilder(
-      column: $state.table.diseaseId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<double> get percentage => $state.composableBuilder(
-      column: $state.table.percentage,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-}
-
-class $$DetailDiagnosisTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $DetailDiagnosisTable> {
-  $$DetailDiagnosisTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<int> get diagnosisId => $state.composableBuilder(
-      column: $state.table.diagnosisId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get diseaseId => $state.composableBuilder(
-      column: $state.table.diseaseId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<double> get percentage => $state.composableBuilder(
-      column: $state.table.percentage,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
+typedef $$DetailDiagnosisTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $DetailDiagnosisTable,
+    DetailDiagnosisEntity,
+    $$DetailDiagnosisTableFilterComposer,
+    $$DetailDiagnosisTableOrderingComposer,
+    $$DetailDiagnosisTableAnnotationComposer,
+    $$DetailDiagnosisTableCreateCompanionBuilder,
+    $$DetailDiagnosisTableUpdateCompanionBuilder,
+    (
+      DetailDiagnosisEntity,
+      BaseReferences<_$AppDatabase, $DetailDiagnosisTable,
+          DetailDiagnosisEntity>
+    ),
+    DetailDiagnosisEntity,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;

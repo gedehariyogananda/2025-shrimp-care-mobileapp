@@ -1,5 +1,4 @@
 import 'package:shrimp_care_mobileapp/config/database.dart';
-import 'package:shrimp_care_mobileapp/entities/detail_diagnosis.dart';
 import 'package:shrimp_care_mobileapp/features/disease/models/rule.dart';
 import 'package:shrimp_care_mobileapp/features/repositories/diagnosis_detail_repository.dart';
 import 'package:shrimp_care_mobileapp/features/repositories/diagnosis_repository.dart';
@@ -39,7 +38,6 @@ class DiagnosisServices {
         return null;
       }
 
-      // Urutkan berdasarkan persentase tertinggi
       final sorted = matchPercentage.entries.toList()
         ..sort((a, b) => b.value.compareTo(a.value));
 
@@ -47,7 +45,6 @@ class DiagnosisServices {
       final topDiseases =
           sorted.where((e) => e.value == topPercentage).toList();
 
-      // Tentukan explain
       String explain = '';
       if (topPercentage >= 85) {
         explain = "Sangat besar kemungkinan";
@@ -65,7 +62,6 @@ class DiagnosisServices {
         explain: explain,
       );
 
-      // Simpan ke DetailDiagnosis semua penyakit dengan persentase tertinggi
       for (var entry in topDiseases) {
         final percentage = entry.value;
 
@@ -78,7 +74,6 @@ class DiagnosisServices {
 
       return diagnosisId;
     } catch (e) {
-      print("Error in forward chaining: $e");
       return null;
     }
   }
@@ -88,7 +83,36 @@ class DiagnosisServices {
     try {
       return await _detailDiagnosisRepository.getByDiagnosisId(diagnosisId);
     } catch (e) {
-      print("Error fetching detail diagnosis: $e");
+      return [];
+    }
+  }
+
+  Future<DiagnosisEntity?> getDiagnosisById(int id) async {
+    try {
+      return await _diagnosisRepository.getById(id);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<DiagnosisEntity>> getDiagnosisHistory() async {
+    try {
+      return await _diagnosisRepository.getHistory();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<DiagnosisEntity>> getAllDiagnosisHistory({
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    try {
+      return await _diagnosisRepository.getAllHistory(
+        startDate: startDate,
+        endDate: endDate,
+      );
+    } catch (e) {
       return [];
     }
   }

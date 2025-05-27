@@ -18,10 +18,11 @@ class AppDatabase extends _$AppDatabase {
 
   static QueryExecutor _openConnection() {
     return driftDatabase(
-      name: 'shrimp_care.db',
+      name: 'db_shrimp_care',
       native: const DriftNativeOptions(
         // By default, `driftDatabase` from `package:drift_flutter` stores the
         // database files in `getApplicationDocumentsDirectory()`.
+        databaseDirectory: getApplicationSupportDirectory,
       ),
       // If you need web support, see https://drift.simonbinder.eu/platforms/web/
     );

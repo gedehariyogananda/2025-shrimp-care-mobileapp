@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
-import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosis_provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/diseases_provider.dart';
 import 'package:shrimp_care_mobileapp/features/home/providers/greeting_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
+import 'package:shrimp_care_mobileapp/utils/disease_helper.dart';
 import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/widget/diagnosis_card.dart';
@@ -32,17 +32,16 @@ class _HomePageState extends State<HomePage> {
     Future.microtask(() {
       Provider.of<DiseasesProvider>(context, listen: false)
           .getHighRiskDisease();
-      Provider.of<DiagnosisProvider>(context, listen: false).fetchDiagnosis(
-        setLimit: 2,
-        startDate: null,
-        endDate: null,
-      );
+      Provider.of<DiagnosaProvider>(context, listen: false)
+          .fetchDiagnosisHistory();
     });
   }
 
   Widget build(BuildContext context) {
     final diseaseProvider = Provider.of<DiseasesProvider>(context);
     final disease = diseaseProvider.highRiskDisease;
+    final diagnosisProvider = Provider.of<DiagnosaProvider>(context);
+    final diagnosis = diagnosisProvider.diagnosisHistory;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -250,57 +249,60 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         height: 5,
                       ),
-                      Consumer<DiagnosisProvider>(
-                        builder: (context, diagnosisProvider, child) =>
-                            diagnosisProvider.isLoading
-                                ? Column(
-                                    children: List.generate(2, (index) {
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 8),
-                                        child: Skeletonizer(
-                                          enableSwitchAnimation: true,
-                                          enabled: true,
-                                          child: diagnosisCard(
-                                            image: "-",
-                                            title: "------------------",
-                                            accuracy: 0,
-                                            onTap: () {},
-                                          ),
-                                        ),
-                                      );
-                                    }),
-                                  )
-                                : (diagnosisProvider.diagnosis.isEmpty)
-                                    ? nullState(nullTitle: "Belum ada data!")
-                                    : Column(
-                                        children: List.generate(
-                                          diagnosisProvider.diagnosis.length,
-                                          (index) {
-                                            final disease = diagnosisProvider
-                                                .diagnosis[index];
-                                            return Column(
-                                              children: [
-                                                diagnosisCard(
-                                                    title: disease.nameDisease!,
-                                                    image:
-                                                        disease.imageDisease!,
-                                                    accuracy: double.parse(disease
-                                                        .bestPercentageDisease!),
-                                                    date: disease.createdAt!,
-                                                    onTap: () {
-                                                      context.pushNamed(
-                                                        'detail_diagnosis',
-                                                        pathParameters: {
-                                                          'id': disease.id!,
-                                                        },
-                                                      );
-                                                    }),
-                                              ],
-                                            );
-                                          },
-                                        ),
+                      Consumer<DiagnosaProvider>(
+                        builder: (context, diagnosa, child) => diagnosa
+                                .isLoading
+                            ? Column(
+                                children: List.generate(2, (index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    child: Skeletonizer(
+                                      enableSwitchAnimation: true,
+                                      enabled: true,
+                                      child: diagnosisCard(
+                                        image: "-",
+                                        title: "------------------",
+                                        accuracy: 0,
+                                        onTap: () {},
                                       ),
+                                    ),
+                                  );
+                                }),
+                              )
+                            : (diagnosa.diagnosisHistory.isEmpty)
+                                ? nullState(nullTitle: "Belum ada data!")
+                                : Column(
+                                    children: List.generate(
+                                      diagnosa.diagnosisHistory.length,
+                                      (index) {
+                                        final diseaseHistory =
+                                            diagnosa.diagnosisHistory[index];
+                                        final disease = getDiseaseById(
+                                            diseaseHistory.diseaseId);
+                                        return Column(
+                                          children: [
+                                            diagnosisCard(
+                                                title:
+                                                    disease?.nameDisease ?? '',
+                                                image: disease?.imageDisease ??
+                                                    '-',
+                                                accuracy:
+                                                    diseaseHistory.percentage,
+                                                date: diseaseHistory.createdAt,
+                                                onTap: () {
+                                                  context.pushNamed(
+                                                    'detail_diagnosis',
+                                                    pathParameters: {
+                                                      'id': diseaseHistory.id
+                                                          .toString(),
+                                                    },
+                                                  );
+                                                }),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
                       ),
                       const SizedBox(
                         height: 20,

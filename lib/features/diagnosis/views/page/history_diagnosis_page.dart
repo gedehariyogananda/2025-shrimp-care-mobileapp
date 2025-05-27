@@ -4,11 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
-import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosis_provider.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/widget/diagnosis_card.dart';
 import 'package:shrimp_care_mobileapp/utils/alert_flushbar.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
+import 'package:shrimp_care_mobileapp/utils/disease_helper.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -23,13 +24,14 @@ class _HistoryDiagnosisPageState extends State<HistoryDiagnosisPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      context.read<DiagnosisProvider>().fetchDiagnosisBySelectedDate();
+      Provider.of<DiagnosaProvider>(context, listen: false)
+          .fetchAllDiagnosisHistory();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final diagnosisProvider = Provider.of<DiagnosisProvider>(context);
+    final diagnosisProvider = Provider.of<DiagnosaProvider>(context);
     final selectedDate = diagnosisProvider.getSelectedDate;
 
     return Scaffold(
@@ -103,70 +105,68 @@ class _HistoryDiagnosisPageState extends State<HistoryDiagnosisPage> {
                 )),
             const SizedBox(height: 16),
             Expanded(
-              child: Consumer<DiagnosisProvider>(
-                builder: (context, diagnosisProvider, child) =>
-                    diagnosisProvider.isLoading
-                        ? ListView.builder(
-                            itemCount: 6,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 8),
-                                child: Skeletonizer(
-                                  enabled: true,
-                                  child: diagnosisCard(
-                                    title: "-----------",
-                                    image: "-",
-                                    accuracy: 0,
-                                    onTap: () {},
-                                  ),
-                                ),
-                              );
-                            },
+              child: Consumer<DiagnosaProvider>(
+                builder: (context, diagnosa, child) => diagnosa.isLoading
+                    ? ListView.builder(
+                        itemCount: 6,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Skeletonizer(
+                              enabled: true,
+                              child: diagnosisCard(
+                                title: "-----------",
+                                image: "-",
+                                accuracy: 0,
+                                onTap: () {},
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                    : diagnosa.allDiagnosisHistory.isEmpty
+                        ? SingleChildScrollView(
+                            child: nullState(
+                              nullTitle:
+                                  "Belum Ada Riwayat Diagnosis Bulan Ini",
+                              description:
+                                  "Mulai diagnosis untuk mengetahui kondisi udangmu.",
+                              buttonTitle: "Cek Diagnosis",
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DiagnosisPage()),
+                                );
+                              },
+                            ),
                           )
-                        : diagnosisProvider.allDiagnosis.isEmpty
-                            ? SingleChildScrollView(
-                                child: nullState(
-                                  nullTitle:
-                                      "Belum Ada Riwayat Diagnosis Bulan Ini",
-                                  description:
-                                      "Mulai diagnosis untuk mengetahui kondisi udangmu.",
-                                  buttonTitle: "Cek Diagnosis",
+                        : ListView.builder(
+                            itemCount: diagnosa.allDiagnosisHistory.length,
+                            itemBuilder: (context, index) {
+                              final diseasesHistory =
+                                  diagnosa.allDiagnosisHistory[index];
+                              final disease =
+                                  getDiseaseById(diseasesHistory.diseaseId);
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: diagnosisCard(
+                                  title: disease?.nameDisease ?? '',
+                                  image: disease?.imageDisease ?? '-',
+                                  accuracy: diseasesHistory.percentage,
+                                  date: diseasesHistory.createdAt,
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              DiagnosisPage()),
+                                    context.pushNamed(
+                                      'detail_diagnosis',
+                                      pathParameters: {
+                                        'id': diseasesHistory.id.toString(),
+                                      },
                                     );
                                   },
                                 ),
-                              )
-                            : ListView.builder(
-                                itemCount:
-                                    diagnosisProvider.allDiagnosis.length,
-                                itemBuilder: (context, index) {
-                                  final disease =
-                                      diagnosisProvider.allDiagnosis[index];
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 5),
-                                    child: diagnosisCard(
-                                      title: disease.nameDisease!,
-                                      image: disease.imageDisease!,
-                                      accuracy: double.parse(
-                                          disease.bestPercentageDisease!),
-                                      date: disease.createdAt!,
-                                      onTap: () {
-                                        context.pushNamed(
-                                          'detail_diagnosis',
-                                          pathParameters: {
-                                            'id': disease.id!,
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  );
-                                },
-                              ),
+                              );
+                            },
+                          ),
               ),
             ),
           ],

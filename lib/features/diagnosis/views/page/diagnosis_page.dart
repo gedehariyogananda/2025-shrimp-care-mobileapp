@@ -71,8 +71,7 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
                               "Mohon tunggu sebentar, sistem kami sedang mencari hasil terbaik untuk kamu.  🚀",
                         );
 
-                        final diagnosisId =
-                            await diagnosaProvider.setDiagnosis(
+                        final diagnosisId = await diagnosaProvider.setDiagnosis(
                           onError: (error) {
                             Navigator.pop(context);
                             context.pushNamed(
@@ -87,7 +86,7 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
                           context.pushNamed(
                             'detail_diagnosis',
                             pathParameters: {
-                              'id': diagnosisId,
+                              'id': diagnosisId.toString(),
                             },
                           );
                         }

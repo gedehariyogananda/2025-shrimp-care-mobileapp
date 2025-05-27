@@ -8,7 +8,6 @@ environment:
 
 dependencies:
   another_flushbar: ^1.12.30
-  connectivity_plus: ^6.1.4
   dio: ^5.7.0
   drift: ^2.26.1
   drift_flutter: ^0.2.4
@@ -20,7 +19,7 @@ dependencies:
   path_provider: ^2.1.4
   provider: ^6.1.4
   shared_preferences: ^2.0.1
-  skeletonizer: ^1.4.3
+  skeletonizer: ^2.0.1
   smooth_page_indicator: ^1.2.1
 
 dev_dependencies:

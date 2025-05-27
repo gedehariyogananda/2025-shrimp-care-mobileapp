@@ -5,6 +5,6 @@ DetailDisease? getDiseaseById(String diseaseId) {
   try {
     return diseaseList.firstWhere((disease) => disease.id == diseaseId);
   } catch (e) {
-    return null; // Tidak ditemukan
+    return null;
   }
 }
