@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
-import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/diseases_provider.dart';
 import 'package:shrimp_care_mobileapp/features/home/providers/greeting_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
@@ -73,27 +72,6 @@ class _HomePageState extends State<HomePage> {
                                         color: Colors.white,
                                         fontWeight: FontWeight.normal,
                                       ),
-                                    );
-                                  },
-                                ),
-                                Consumer<GreetingProvider>(
-                                  builder: (context, greetingProvider, _) {
-                                    return FutureBuilder<String?>(
-                                      future: greetingProvider.nameGreeting(),
-                                      builder: (context, snapshot) {
-                                        if (greetingProvider.isLoading) {
-                                          return const CircularProgressIndicator(
-                                            color: Colors.white,
-                                          );
-                                        }
-                                        return Text(
-                                          snapshot.data ?? '',
-                                          style: MyTextStyle.text18.copyWith(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        );
-                                      },
                                     );
                                   },
                                 ),
@@ -197,12 +175,7 @@ class _HomePageState extends State<HomePage> {
                       textTopCard(
                         title: "Waspadai Penyakit Udang",
                         onTap: () {
-                          context.pushNamed('disease').then((_) {
-                            context
-                                .read<DiseaseProvider>()
-                                .fetchDiseaseHomePage();
-                            context.read<DiseaseProvider>().resetParams();
-                          });
+                          context.pushNamed('disease');
                         },
                       ),
                       const SizedBox(

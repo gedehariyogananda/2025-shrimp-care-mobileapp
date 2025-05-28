@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
 import 'package:shrimp_care_mobileapp/config/api_server.dart';
-import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
+import 'package:shrimp_care_mobileapp/features/_auth/providers/token_provider.dart';
 
 class DioClient {
   late Dio dio;

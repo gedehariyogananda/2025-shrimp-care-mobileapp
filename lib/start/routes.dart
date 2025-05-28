@@ -1,10 +1,10 @@
 import 'package:go_router/go_router.dart';
 import 'package:shrimp_care_mobileapp/base/components/page/splash_screen_page.dart';
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
-import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
-import 'package:shrimp_care_mobileapp/features/auth/views/page/login_page.dart';
+import 'package:shrimp_care_mobileapp/features/_auth/providers/token_provider.dart';
+import 'package:shrimp_care_mobileapp/features/_auth/views/page/login_page.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/bottom_navigation.dart';
-import 'package:shrimp_care_mobileapp/features/auth/views/page/register_page.dart';
+import 'package:shrimp_care_mobileapp/features/_auth/views/page/register_page.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/history_diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/result_diagnosis_page.dart';

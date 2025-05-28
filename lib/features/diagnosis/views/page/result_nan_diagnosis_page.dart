@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
-import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosis_provider.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/diagnosis_page.dart';
-import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
+import 'package:shrimp_care_mobileapp/features/disease/providers/diseases_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
@@ -26,14 +25,10 @@ class _ResultNanDiagnosisPageState extends State<ResultNanDiagnosisPage> {
         leading: true,
         onLeadingPressed: () {
           Future.microtask(() {
-            Provider.of<DiseaseProvider>(context, listen: false)
-                .fetchDiseaseHomePage();
-            Provider.of<DiagnosisProvider>(context, listen: false)
-                .fetchDiagnosis(
-              setLimit: 2,
-              startDate: null,
-              endDate: null,
-            );
+            Provider.of<DiseasesProvider>(context, listen: false)
+                .getHighRiskDisease();
+            Provider.of<DiagnosaProvider>(context, listen: false)
+                .fetchDiagnosisHistory();
           });
           Navigator.of(context).popUntil((route) => route.isFirst);
         },

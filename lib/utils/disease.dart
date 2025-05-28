@@ -15,12 +15,14 @@ class MyDisease {
   }
 
   static Color getColorByAccuracy(double accuracy) {
-    if (accuracy <= 40.00) {
-      return MyColor.danger;
-    } else if (accuracy <= 70.00) {
+     if (accuracy >= 85) {
+      return MyColor.success; 
+    } else if (accuracy >= 60) {
+      return MyColor.primary; 
+    } else if (accuracy >= 40) {
       return MyColor.warning;
     } else {
-      return MyColor.primary;
+      return MyColor.danger;
     }
   }
 }

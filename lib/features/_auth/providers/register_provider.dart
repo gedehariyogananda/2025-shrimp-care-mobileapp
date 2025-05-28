@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shrimp_care_mobileapp/config/dio_client.dart';
-import 'package:shrimp_care_mobileapp/features/auth/services/register_service.dart';
+import 'package:shrimp_care_mobileapp/features/_auth/services/register_service.dart';
 
 class RegisterProvider extends ChangeNotifier {
   final RegisterService _registerService =

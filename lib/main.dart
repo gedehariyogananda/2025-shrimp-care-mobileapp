@@ -3,13 +3,9 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
 import 'package:shrimp_care_mobileapp/config/database.dart';
-import 'package:shrimp_care_mobileapp/features/auth/providers/login_provider.dart';
-import 'package:shrimp_care_mobileapp/features/auth/providers/register_provider.dart';
-import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
+import 'package:shrimp_care_mobileapp/features/_auth/providers/login_provider.dart';
+import 'package:shrimp_care_mobileapp/features/_auth/providers/register_provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
-import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosis_provider.dart';
-import 'package:shrimp_care_mobileapp/features/diagnosis/providers/fc_diagnosis_provider.dart';
-import 'package:shrimp_care_mobileapp/features/disease/providers/disease_provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/diseases_provider.dart';
 import 'package:shrimp_care_mobileapp/features/home/providers/greeting_provider.dart';
 import 'package:shrimp_care_mobileapp/features/repositories/diagnosis_detail_repository.dart';
@@ -34,9 +30,6 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => TokenProvider(),
-        ),
-        ChangeNotifierProvider(
           create: (_) => LoginProvider(),
         ),
         ChangeNotifierProvider(
@@ -44,15 +37,6 @@ class MainApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => GreetingProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => DiseaseProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => DiagnosisProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => FcDiagnosisProvider(),
         ),
         ChangeNotifierProvider(
           create: (_) => DiseasesProvider(),

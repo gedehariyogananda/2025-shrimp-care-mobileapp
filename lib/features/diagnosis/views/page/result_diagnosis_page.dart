@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
-import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosis_provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/diseases_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/disease.dart';
@@ -46,12 +45,8 @@ class _ResultDiagnosisPageState extends State<ResultDiagnosisPage> {
           Future.microtask(() {
             Provider.of<DiseasesProvider>(context, listen: false)
                 .getHighRiskDisease();
-            Provider.of<DiagnosisProvider>(context, listen: false)
-                .fetchDiagnosis(
-              setLimit: 2,
-              startDate: null,
-              endDate: null,
-            );
+            Provider.of<DiagnosaProvider>(context, listen: false)
+                .fetchDiagnosisHistory();
           });
           Navigator.of(context).popUntil((route) => route.isFirst);
         },
@@ -69,26 +64,11 @@ class _ResultDiagnosisPageState extends State<ResultDiagnosisPage> {
             SizedBox(height: 8),
             Text.rich(
               TextSpan(
-                text:
-                    'Berdasarkan gejala yang kamu pilih, sistem memberikan kesimpulan bahwa udangmu ',
+                text: 'Udangmu ',
                 style: MyTextStyle.text14.copyWith(color: MyColor.secondary),
                 children: [
                   TextSpan(
                     text: '${dataDiagnosis?.explain}',
-                    style: MyTextStyle.text14.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color:  MyDisease.getColorByAccuracy(
-                        dataDiagnosis?.percentage ?? 0,
-                      ),
-                    ),
-                  ),
-                  TextSpan(
-                    text:
-                        ' terdampak penyakit di bawah ini dengan persentase akurasi sistem tertinggi yaitu ',
-                  ),
-                  TextSpan(
-                    text: formatPercentage(
-                        dataDiagnosis?.percentage ?? 0) + ' %',
                     style: MyTextStyle.text14.copyWith(
                       fontWeight: FontWeight.bold,
                       color: MyDisease.getColorByAccuracy(
@@ -96,7 +76,10 @@ class _ResultDiagnosisPageState extends State<ResultDiagnosisPage> {
                       ),
                     ),
                   ),
-                  TextSpan(text: '. Kamu dapat melihat detail gejala keseluruhan dan penanganan dengan klik pada penyakit yang terdiagnosa.'),
+                  TextSpan(
+                    text:
+                        ' terkena penyakit berikut. Disusun berdasarkan akurasi tertinggi dan perhitungan sistem berdasarkan data pakar!. Klik untuk lihat detail gejala & penanganannya. ',
+                  ),
                 ],
               ),
             ),
@@ -165,7 +148,8 @@ class _ResultDiagnosisPageState extends State<ResultDiagnosisPage> {
                       isAlertDanger: true,
                       icon: Icons.warning_amber_outlined,
                       title: "Perhatian!",
-                      description: "Hasil ini berdasarkan sistem pakar dan dari gejala yang kamu pilih. Untuk kepastian diagnosis dan pengobatan, silakan konsultasikan ke ahli/teknisi/medis.",
+                      description:
+                          "Hasil ini berdasarkan sistem pakar dan dari gejala yang kamu pilih. Untuk kepastian diagnosis dan pengobatan, silakan konsultasikan ke ahli/teknisi/medis.",
                       onTap: null),
                 ],
               )),
