@@ -5,11 +5,12 @@ import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
 import 'package:shrimp_care_mobileapp/config/database.dart';
 import 'package:shrimp_care_mobileapp/features/_auth/providers/login_provider.dart';
 import 'package:shrimp_care_mobileapp/features/_auth/providers/register_provider.dart';
+import 'package:shrimp_care_mobileapp/features/_auth/providers/token_provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/repositories/diagnosis_detail_repository.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/repositories/diagnosis_repository.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/diseases_provider.dart';
 import 'package:shrimp_care_mobileapp/features/home/providers/greeting_provider.dart';
-import 'package:shrimp_care_mobileapp/features/repositories/diagnosis_detail_repository.dart';
-import 'package:shrimp_care_mobileapp/features/repositories/diagnosis_repository.dart';
 import 'package:shrimp_care_mobileapp/services/diagnosis_service.dart';
 import 'package:shrimp_care_mobileapp/start/routes.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
@@ -40,6 +41,9 @@ class MainApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => DiseasesProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => TokenProvider(),
         ),
         ChangeNotifierProvider(
           create: (_) => DiagnosaProvider(DiagnosisServices(

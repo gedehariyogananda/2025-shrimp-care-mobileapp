@@ -13,7 +13,10 @@ class AppConstants {
 
   static const String keySharedPrefUserId = "userId";
   static const String keySharedPrefToken = "token";
+  
   static const String keySharedPrefName = "name";
+  static const String keySharedPrefAge = "age";
+  static const String keySharedPrefJob = "job";
 
   static const int timeoutConnection = 10;
 }

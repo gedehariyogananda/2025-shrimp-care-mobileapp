@@ -128,7 +128,7 @@ class _DiseasePageState extends State<DiseasePage> {
                             title: disease.nameDisease ?? "",
                             image: disease.imageDisease ?? "",
                             risk: disease.riskLevel ?? 0,
-                            description: disease.moreInformation ?? "",
+                            description: disease.definitionDisease ?? "",
                             onTap: () {
                               context.pushNamed(
                                 'detail_disease',

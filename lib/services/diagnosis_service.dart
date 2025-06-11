@@ -1,7 +1,7 @@
 import 'package:shrimp_care_mobileapp/config/database.dart';
 import 'package:shrimp_care_mobileapp/features/disease/models/rule.dart';
-import 'package:shrimp_care_mobileapp/features/repositories/diagnosis_detail_repository.dart';
-import 'package:shrimp_care_mobileapp/features/repositories/diagnosis_repository.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/repositories/diagnosis_detail_repository.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/repositories/diagnosis_repository.dart';
 
 class DiagnosisServices {
   final DiagnosisRepository _diagnosisRepository;

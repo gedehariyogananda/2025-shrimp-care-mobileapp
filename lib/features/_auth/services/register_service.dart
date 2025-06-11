@@ -1,28 +1,23 @@
-import 'package:shrimp_care_mobileapp/config/dio_client.dart';
+import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
 import 'package:shrimp_care_mobileapp/exception/error_handler.dart';
+import 'package:shrimp_care_mobileapp/features/_auth/providers/token_provider.dart';
 
 class RegisterService {
-  final DioClient dioClient;
+  final TokenProvider tokenProvider;
 
   RegisterService({
-    required this.dioClient,
+    required this.tokenProvider,
   });
 
   Future register({
-    required String email,
-    required String password,
     required String name,
-    required String phone,
     required String job,
+    required String age,
   }) async {
     try {
-      await dioClient.dio.post("/users", data: {
-        'email': email,
-        'password': password,
-        'name': name,
-        'phone': phone,
-        'employment': job,
-      });
+      tokenProvider.setToken(AppConstants.keySharedPrefName, name);
+      tokenProvider.setToken(AppConstants.keySharedPrefJob, job);
+      tokenProvider.setToken(AppConstants.keySharedPrefAge, age);
     } catch (e) {
       errorHandler(error: e);
       rethrow;

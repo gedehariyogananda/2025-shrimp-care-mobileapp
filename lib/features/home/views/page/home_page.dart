@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shrimp_care_mobileapp/features/_auth/providers/token_provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/providers/diseases_provider.dart';
 import 'package:shrimp_care_mobileapp/features/home/providers/greeting_provider.dart';
@@ -18,7 +19,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 class HomePage extends StatefulWidget {
   final bool isSamplingDataEmpty;
 
-  const HomePage({super.key, this.isSamplingDataEmpty = true});
+  const HomePage({super.key, this.isSamplingDataEmpty = false});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -39,8 +40,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final diseaseProvider = Provider.of<DiseasesProvider>(context);
     final disease = diseaseProvider.highRiskDisease;
-    final diagnosisProvider = Provider.of<DiagnosaProvider>(context);
-    final diagnosis = diagnosisProvider.diagnosisHistory;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -71,6 +70,32 @@ class _HomePageState extends State<HomePage> {
                                       style: MyTextStyle.text18.copyWith(
                                         color: Colors.white,
                                         fontWeight: FontWeight.normal,
+                                      ),
+                                    );
+                                  },
+                                ),
+                                const SizedBox(height: 5),
+                                FutureBuilder<String?>(
+                                  future: TokenProvider().getDataLocal('name'),
+                                  builder: (context, snapshot) {
+                                    final name = snapshot.data;
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Skeletonizer(
+                                        enableSwitchAnimation: true,
+                                        enabled: true,
+                                        child: Text(
+                                          "........................",
+                                        ),
+                                      );
+                                    }
+                                    return Text(
+                                      (name != null && name.isNotEmpty)
+                                          ? "Hai, $name"
+                                          : "Hai, Pengguna",
+                                      style: MyTextStyle.text18.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     );
                                   },
@@ -189,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                                 (index) {
                                   final data = disease[index];
                                   return Padding(
-                                    padding: const EdgeInsets.only(bottom: 12),
+                                    padding: const EdgeInsets.only(bottom: 1),
                                     child: diseaseCard(
                                       title: data.nameDisease!,
                                       image: data.imageDisease!,
@@ -211,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 7,
                       ),
                       textTopCard(
                         title: "Riwayat Diagnosis",

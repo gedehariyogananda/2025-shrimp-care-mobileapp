@@ -2,7 +2,6 @@ import 'package:go_router/go_router.dart';
 import 'package:shrimp_care_mobileapp/base/components/page/splash_screen_page.dart';
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
 import 'package:shrimp_care_mobileapp/features/_auth/providers/token_provider.dart';
-import 'package:shrimp_care_mobileapp/features/_auth/views/page/login_page.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/bottom_navigation.dart';
 import 'package:shrimp_care_mobileapp/features/_auth/views/page/register_page.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/diagnosis_page.dart';
@@ -86,13 +85,6 @@ final GoRouter router = GoRouter(routes: [
         )
       ]),
   GoRoute(
-    path: '/login',
-    name: 'login',
-    builder: (context, state) {
-      return LoginPage();
-    },
-  ),
-  GoRoute(
     path: '/register',
     name: 'register',
     builder: (context, state) {
@@ -103,12 +95,12 @@ final GoRouter router = GoRouter(routes: [
     path: '/session',
     name: 'session',
     redirect: (context, state) async {
-      String? token =
-          await TokenProvider().getDataLocal(AppConstants.keySharedPrefToken);
-      if (token != null) {
+      String? name =
+          await TokenProvider().getDataLocal(AppConstants.keySharedPrefName);
+      if (name != null) {
         return '/home_page';
       } else {
-        return '/login';
+        return '/register';
       }
     },
   ),

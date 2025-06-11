@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/features/_auth/providers/register_provider.dart';
-import 'package:shrimp_care_mobileapp/features/_auth/views/widget/button_oauth.dart';
 import 'package:shrimp_care_mobileapp/features/_auth/views/widget/form_dropdown.dart';
-import 'package:shrimp_care_mobileapp/features/_auth/views/widget/separation_line.dart';
 import 'package:shrimp_care_mobileapp/utils/alert_flushbar.dart';
-import 'package:shrimp_care_mobileapp/utils/alert_snackbar.dart';
 import 'package:shrimp_care_mobileapp/utils/button.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/text_form_field.dart';
@@ -18,11 +15,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
   String jobController = '';
 
   List<String> jobValue = [];
@@ -38,17 +32,16 @@ class _RegisterPageState extends State<RegisterPage> {
       'Pelajar/Mahasiswa',
       'Peneliti',
       'Sales',
+      'Petambak',
       'Lainnya'
     ];
   }
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
     nameController.dispose();
-    phoneController.dispose();
+    ageController.dispose();
+    jobController = '';
     super.dispose();
   }
 
@@ -85,7 +78,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'Daftar',
+                      'Data Diri',
                       style: MyTextStyle.text24.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -93,7 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      'Masuk ke akun untuk menikmati keseluruhan fitur Shrimp Care.',
+                      'Masukkan data diri untuk menikmati keseluruhan fitur Shrimp Care.',
                       style: MyTextStyle.text14.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.normal,
@@ -129,21 +122,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: nameController,
                       isRequired: true),
                   const SizedBox(height: 20),
-                  customFormInput(
-                      title: 'Email',
-                      hintText: "Masukkan email",
-                      icon: Icons.alternate_email_sharp,
-                      controller: emailController,
-                      isRequired: true),
-                  const SizedBox(height: 20),
-                  customFormInput(
-                      title: 'Nomor Telepon',
-                      hintText: "Masukkan nomor telepon",
-                      controller: phoneController,
-                      icon: Icons.phone,
-                      isRequired: true,
-                      forPhoneNumber: true),
-                  const SizedBox(height: 20),
                   formDropdown(
                       title: 'Pekerjaan',
                       isRequired: true,
@@ -158,75 +136,39 @@ class _RegisterPageState extends State<RegisterPage> {
                       }),
                   const SizedBox(height: 20),
                   customFormInput(
-                      title: 'Kata Sandi',
-                      hintText: "Masukkan kata sandi",
-                      isPassword: true,
-                      icon: Icons.lock,
-                      controller: passwordController,
-                      isRequired: true),
-                  const SizedBox(height: 20),
-                  customFormInput(
-                      title: 'Konfirmasi Kata Sandi',
-                      hintText: "Masukkan konfirmasi kata sandi",
-                      isPassword: true,
-                      controller: confirmPasswordController,
-                      icon: Icons.lock,
-                      isRequired: true),
-                  const SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () {
-                        context.goNamed('login');
-                      },
-                      child: Text(
-                        'Sudah punya akun? Masuk',
-                        style: MyTextStyle.text14.copyWith(
-                          color: MyColor.primary,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                  ),
+                      title: 'Umur',
+                      hintText: "Masukkan umur",
+                      controller: ageController,
+                      icon: Icons.accessibility_new_sharp,
+                      isRequired: true,
+                      forPhoneNumber: true),
                   const SizedBox(height: 20),
                   myButton(
-                      text: 'Register',
+                      text: 'Simpan',
                       isLoading: context.watch<RegisterProvider>().isLoading,
                       onPressed: () {
-                        final email = emailController.text.trim();
-                        final password = passwordController.text;
-                        final confirmPassword = confirmPasswordController.text;
                         final name = nameController.text.trim();
-                        final phone = phoneController.text.trim();
                         final job = jobController;
+                        final age = ageController.text.trim();
 
                         context.read<RegisterProvider>().register(
-                              email: email,
-                              password: password,
-                              confirmPassword: confirmPassword,
                               name: name,
-                              phone: phone,
                               job: job,
+                              age: age,
                               onError: (error) {
                                 AlertSnackbar.showErrorSnackbar(
                                     context, error.toString());
                               },
                               onSuccess: () async {
                                 AlertSnackbar.showSuccessSnackbar(
-                                    context, 'Register berhasil!');
+                                    context, 'Data diri berhasil!');
                                 await Future.delayed(
-                                    const Duration(seconds: 1));
-                                context.go('/login');
+                                    const Duration(milliseconds: 500));
+                                context.go('/home_page');
                               },
                             );
                       }),
                   const SizedBox(height: 20),
-                  separationLine(),
-                  const SizedBox(height: 20),
-                  buttonOauth(
-                    onPressed: () {},
-                  ),
-                  SizedBox(height: 20),
                 ],
               ),
             ),
