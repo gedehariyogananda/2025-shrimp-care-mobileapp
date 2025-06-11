@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
 import 'package:shrimp_care_mobileapp/features/disease/models/disease.dart';
+import 'package:shrimp_care_mobileapp/features/disease/providers/diseases_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/alert_flushbar.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
@@ -37,7 +38,20 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
     return Consumer<DiagnosaProvider>(builder: (context, diagnosaProvider, _) {
       return Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBar(title: "Diagnosis Gejala"),
+        appBar: CustomAppBar(
+          title: "Diagnosis Gejala",
+          leading: true,
+          onLeadingPressed: () {
+            Future.microtask(() {
+              Provider.of<DiseasesProvider>(context, listen: false)
+                  .getHighRiskDisease();
+              Provider.of<DiagnosaProvider>(context, listen: false)
+                  .fetchDiagnosisHistory();
+              diagnosaProvider.resetSymptoms();
+            });
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          },
+        ),
         body: Padding(
           padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
           child: Column(

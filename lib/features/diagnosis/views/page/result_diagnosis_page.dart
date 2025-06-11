@@ -6,7 +6,6 @@ import 'package:shrimp_care_mobileapp/features/disease/providers/diseases_provid
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/disease.dart';
 import 'package:shrimp_care_mobileapp/utils/disease_helper.dart';
-import 'package:shrimp_care_mobileapp/utils/format_helper.dart';
 import 'package:shrimp_care_mobileapp/utils/null_state.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';

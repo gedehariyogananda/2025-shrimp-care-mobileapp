@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/features/account/views/page/account_page.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/history_diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/features/home/views/page/home_page.dart';
 import 'package:shrimp_care_mobileapp/features/sampling/views/page/sampling_page.dart';
 import 'package:shrimp_care_mobileapp/features/sampling/views/page/detail_sampling_page.dart';
-import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/diagnosis_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
@@ -12,6 +14,7 @@ import 'package:shrimp_care_mobileapp/base/components/widget/app_bar.dart';
 class BottomNavigation extends StatefulWidget {
   @override
   _BottomNavigationState createState() => _BottomNavigationState();
+  
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {
@@ -243,11 +246,11 @@ class _BottomNavigationState extends State<BottomNavigation> {
                             : () {
                                 Navigator.pop(context);
                                 if (_selectedMethod == 0) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DiagnosisPage(),
-                                      ));
+                                  context.pushNamed('diagnosis').then((_) => {
+                                        context
+                                            .read<DiagnosaProvider>()
+                                            .resetSymptoms()
+                                      });
                                 } else if (_selectedMethod == 1) {
                                   Navigator.push(
                                       context,

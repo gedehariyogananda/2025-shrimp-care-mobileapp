@@ -1,13 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shrimp_care_mobileapp/features/sampling/views/page/detail_sampling_page.dart';
-import 'package:shrimp_care_mobileapp/features/diagnosis/views/page/diagnosis_page.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
+import 'package:provider/provider.dart';
+import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
 
 Widget informationCardSlider() {
   final PageController pageController = PageController();
@@ -48,12 +48,8 @@ Widget informationCardSlider() {
                   description: cards[index]["description"],
                   onTap: () {
                     if (index == 0) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DiagnosisPage(),
-                        ),
-                      );
+                      context.pushNamed('diagnosis').then((_) =>
+                          {context.read<DiagnosaProvider>().resetSymptoms()});
                     } else if (index == 1) {
                       Navigator.push(
                         context,
