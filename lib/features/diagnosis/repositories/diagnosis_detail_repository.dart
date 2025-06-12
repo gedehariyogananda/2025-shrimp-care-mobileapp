@@ -1,6 +1,5 @@
 import 'package:shrimp_care_mobileapp/base/repository/base_repository.dart';
 import 'package:shrimp_care_mobileapp/config/database.dart';
-import 'package:shrimp_care_mobileapp/entities/detail_diagnosis.dart';
 
 class DiagnosisDetailRepository extends BaseRepository {
   DiagnosisDetailRepository(AppDatabase db) : super(db);
@@ -20,5 +19,9 @@ class DiagnosisDetailRepository extends BaseRepository {
     return await (db.select(db.detailDiagnosis)
           ..where((tbl) => tbl.diagnosisId.equals(diagnosisId)))
         .get();
+  }
+
+  Future<void> clearAllData() async {
+    await db.delete(db.detailDiagnosis).go();
   }
 }

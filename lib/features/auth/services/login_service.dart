@@ -1,8 +1,8 @@
 import 'package:shrimp_care_mobileapp/base/constant/app_constant.dart';
 import 'package:shrimp_care_mobileapp/config/dio_client.dart';
 import 'package:shrimp_care_mobileapp/exception/error_handler.dart';
-import 'package:shrimp_care_mobileapp/features/_auth/models/profile.dart';
-import 'package:shrimp_care_mobileapp/features/_auth/providers/token_provider.dart';
+import 'package:shrimp_care_mobileapp/features/auth/models/profile.dart';
+import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
 
 class LoginService {
   final DioClient dioClient;

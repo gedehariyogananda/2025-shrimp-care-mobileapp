@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shrimp_care_mobileapp/features/_auth/providers/token_provider.dart';
+import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 import 'package:shrimp_care_mobileapp/utils/textstyle.dart';
 
@@ -37,7 +37,6 @@ class AccountPage extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 30),
-          
           CircleAvatar(
             radius: 50,
             backgroundImage: AssetImage(avatarAsset),
@@ -52,7 +51,6 @@ class AccountPage extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(job, style: MyTextStyle.text14),
-
           const SizedBox(height: 30),
           Card(
             color: Colors.grey[50],
@@ -73,22 +71,46 @@ class AccountPage extends StatelessWidget {
               ),
             ),
           ),
-
           const SizedBox(height: 40),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                tokenProvider.logOut(context, onSuccess: () {
-                  context.go('/');
-                });
+              onPressed: () async {
+                final shouldReset = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Konfirmasi"),
+                    content: const Text(
+                      "Apakah Anda yakin ingin mereset data?\n\nSemua data diagnosa dan data diri akan hilang.",
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text("Batal"),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: const Text(
+                          "Ya, Reset",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+
+                if (shouldReset == true) {
+                  tokenProvider.logOut(context, onSuccess: () {
+                    context.go('/');
+                  });
+                }
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 backgroundColor: MyColor.primary,
               ),
               child: Text(
-                'Logout',
+                'Reset Data',
                 style: MyTextStyle.text16.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

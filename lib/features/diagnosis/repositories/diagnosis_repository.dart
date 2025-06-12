@@ -42,4 +42,8 @@ class DiagnosisRepository extends BaseRepository {
               tbl.createdAt.isSmallerOrEqualValue(endDate)))
         .get();
   }
+
+  Future<void> clearAllData() async {
+    await db.delete(db.diagnosis).go();
+  }
 }

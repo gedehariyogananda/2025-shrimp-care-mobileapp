@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:shrimp_care_mobileapp/features/_auth/providers/login_provider.dart';
-import 'package:shrimp_care_mobileapp/features/_auth/views/widget/button_oauth.dart';
-import 'package:shrimp_care_mobileapp/features/_auth/views/widget/separation_line.dart';
+import 'package:shrimp_care_mobileapp/features/auth/providers/login_provider.dart';
+import 'package:shrimp_care_mobileapp/features/auth/views/widget/button_oauth.dart';
+import 'package:shrimp_care_mobileapp/features/auth/views/widget/separation_line.dart';
 import 'package:shrimp_care_mobileapp/utils/alert_flushbar.dart';
 import 'package:shrimp_care_mobileapp/utils/button.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';

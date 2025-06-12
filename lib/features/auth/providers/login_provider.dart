@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shrimp_care_mobileapp/config/dio_client.dart';
-import 'package:shrimp_care_mobileapp/features/_auth/providers/token_provider.dart';
-import 'package:shrimp_care_mobileapp/features/_auth/services/login_service.dart';
+import 'package:shrimp_care_mobileapp/features/auth/providers/token_provider.dart';
+import 'package:shrimp_care_mobileapp/features/auth/services/login_service.dart';
 
 class LoginProvider extends ChangeNotifier {
   final LoginService _loginService =
