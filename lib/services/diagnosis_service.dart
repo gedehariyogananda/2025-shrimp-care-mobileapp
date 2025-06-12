@@ -11,13 +11,13 @@ class DiagnosisServices {
 
   Future<int?> forwardChaining(List<String> selectedSymptomCodes) async {
     final rules = [
-      Rule(diseaseId: "Pe1", symptoms: ["Ge1", "Ge2", "Ge3", "Ge4"]),
+      Rule(diseaseId: "Pe1", symptoms: ["Ge1", "Ge2", "Ge4"]),
       Rule(diseaseId: "Pe2", symptoms: ["Ge5", "Ge6", "Ge7", "Ge8"]),
-      Rule(diseaseId: "Pe3", symptoms: ["Ge9", "Ge10", "Ge11"]),
+      Rule(diseaseId: "Pe3", symptoms: ["Ge9", "Ge11"]),
       Rule(diseaseId: "Pe4", symptoms: ["Ge6", "Ge7", "Ge8", "Ge12"]),
       Rule(diseaseId: "Pe5", symptoms: ["Ge11", "Ge13", "Ge14"]),
-      Rule(diseaseId: "Pe6", symptoms: ["Ge2", "Ge15", "Ge16"]),
-      Rule(diseaseId: "Pe7", symptoms: ["Ge17", "Ge18", "Ge16"]),
+      Rule(diseaseId: "Pe6", symptoms: ["Ge2", "Ge15"]),
+      Rule(diseaseId: "Pe7", symptoms: ["Ge17", "Ge18"]),
       Rule(diseaseId: "Pe8", symptoms: ["Ge4", "Ge19", "Ge20"]),
     ];
 

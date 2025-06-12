@@ -10,10 +10,6 @@ final List<Symptoms> symptomsShrimp = [
     nameSymptoms: "Tubuh Pucat",
   ),
   Symptoms(
-    id: "Ge3",
-    nameSymptoms: "Tampak Sekarat/Lemah",
-  ),
-  Symptoms(
     id: "Ge4",
     nameSymptoms: "Berenang ke Permukaan",
   ),
@@ -35,11 +31,7 @@ final List<Symptoms> symptomsShrimp = [
   ),
   Symptoms(
     id: "Ge9",
-    nameSymptoms: "Kotoran Mengapung di Permukaan",
-  ),
-  Symptoms(
-    id: "Ge10",
-    nameSymptoms: "Usus Tidak Terisi Makanan, Namun Untaian Feses Berwarna Putih",
+    nameSymptoms: "Kotoran Mengapung di Tambak",
   ),
   Symptoms(
     id: "Ge11",
@@ -60,10 +52,6 @@ final List<Symptoms> symptomsShrimp = [
   Symptoms(
     id: "Ge15",
     nameSymptoms: "Insang Berwarna Kekuningan",
-  ),
-  Symptoms(
-    id: "Ge16",
-    nameSymptoms: "Hepatopankreas Berwarna Kuning",
   ),
   Symptoms(
     id: "Ge17",
