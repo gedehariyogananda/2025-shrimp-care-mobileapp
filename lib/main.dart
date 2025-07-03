@@ -14,9 +14,16 @@ import 'package:shrimp_care_mobileapp/features/home/providers/greeting_provider.
 import 'package:shrimp_care_mobileapp/services/diagnosis_service.dart';
 import 'package:shrimp_care_mobileapp/start/routes.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
+import 'package:flutter/services.dart'; 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   await initializeDateFormatting(AppConstants.initializedLang, null);
   runApp(MainApp());
 }

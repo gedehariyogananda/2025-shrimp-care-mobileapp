@@ -16,7 +16,7 @@ class MyDisease {
 
   static Color getColorByAccuracy(double accuracy) {
      if (accuracy >= 85) {
-      return MyColor.success; 
+      return MyColor.percentageSuccess; 
     } else if (accuracy >= 60) {
       return MyColor.primary; 
     } else if (accuracy >= 40) {

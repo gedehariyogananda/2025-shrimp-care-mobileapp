@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shrimp_care_mobileapp/features/diagnosis/providers/diagnosa_provider.dart';
+import 'package:shrimp_care_mobileapp/features/sampling/views/page/detail_sampling_page.dart';
 import 'package:shrimp_care_mobileapp/utils/colors.dart';
 
 Widget menu(BuildContext context) {
   return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
       menuItem(
         gradient: [const Color(0xff33A09D), const Color(0xff25706D)],
@@ -34,7 +35,12 @@ Widget menu(BuildContext context) {
         outsideColor: MyColor.softWarning,
         title: 'Sampling',
         onPressed: () {
-          context.pushNamed('sampling');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetailSamplingPage(),
+            ),
+          );
         },
       ),
     ],
